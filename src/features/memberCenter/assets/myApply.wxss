@@ -1,0 +1,103 @@
+.my_apply {
+  width: 100%;
+}
+.my_apply .ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
+  border-radius: 6px;
+}
+.my_apply_table {
+  background: #fff;
+  margin: 20px 0;
+}
+.my_apply_table .ant-table-thead > tr > th {
+  background: #2b3a4b;
+  color: #fff;
+}
+.my_apply_table .ant-table-thead > tr > th::before {
+  background-color: transparent !important;
+}
+.my_apply_table .ant-table-tbody > tr > td {
+  border: none;
+}
+.my_apply_table .oprate_btn {
+  width: 130px;
+  height: 32px;
+  background: #ba9756;
+  border-radius: 100px;
+  text-align: center;
+  line-height: 32px;
+  color: #fff;
+  cursor: pointer;
+}
+.my_apply_table .oprate_text {
+  color: #ba9756;
+  font-family: PingFangSC-Medium, PingFang SC;
+  font-weight: 500;
+  cursor: pointer;
+}
+.my_apply .flex_row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ant-modal-centered .ant-modal.modal_class,
+.ant-modal-centered .ant-modal.approve_modal {
+  text-align: center !important;
+  color: #333333;
+  font-family: PingFangSC-Semibold, PingFang SC;
+  font-weight: 600;
+}
+.ant-modal-centered .ant-modal.modal_class .ant-modal-content,
+.ant-modal-centered .ant-modal.approve_modal .ant-modal-content {
+  border-radius: 8px;
+}
+.ant-modal-centered .ant-modal.modal_class .ant-modal-header,
+.ant-modal-centered .ant-modal.approve_modal .ant-modal-header {
+  border: none;
+  padding-top: 30px;
+  border-radius: 10px;
+  background: #fff;
+  font-size: 16px;
+}
+.ant-modal-centered .ant-modal.modal_class .ant-modal-header .ant-modal-title,
+.ant-modal-centered .ant-modal.approve_modal .ant-modal-header .ant-modal-title {
+  font-family: PingFangSC-Semibold, PingFang SC;
+  font-weight: 600 !important;
+}
+.ant-modal-centered .ant-modal.modal_class .ant-modal-body,
+.ant-modal-centered .ant-modal.approve_modal .ant-modal-body {
+  padding: 40px 100px;
+}
+.ant-modal-centered .ant-modal.modal_class .ant-form-item-control-input,
+.ant-modal-centered .ant-modal.approve_modal .ant-form-item-control-input {
+  min-height: 50px;
+}
+.ant-modal-centered .ant-modal.modal_class .ant-form-item-control-input-content,
+.ant-modal-centered .ant-modal.approve_modal .ant-form-item-control-input-content {
+  display: flex;
+  align-items: center;
+}
+.ant-modal-centered .ant-modal.modal_class .ml_20,
+.ant-modal-centered .ant-modal.approve_modal .ml_20 {
+  margin-left: 20px;
+}
+.ant-modal-centered .ant-modal.modal_class .modal_btn,
+.ant-modal-centered .ant-modal.approve_modal .modal_btn {
+  margin-top: 50px;
+}
+.ant-modal-centered .ant-modal.modal_class .ant-input,
+.ant-modal-centered .ant-modal.approve_modal .ant-input {
+  height: 50px;
+}
+.ant-modal-centered .ant-modal.modal_class .ant-form-item-label,
+.ant-modal-centered .ant-modal.approve_modal .ant-form-item-label {
+  line-height: 50px;
+}
+.approve_modal .ant-radio-inner:after {
+  background-color: #ba9756;
+}
+.approve_modal .ant-radio-checked .ant-radio-inner {
+  border-color: #ba9756;
+}
+.approve_modal .ant-input {
+  min-height: 90px;
+}

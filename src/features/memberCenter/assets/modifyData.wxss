@@ -1,0 +1,7 @@
+.modify_data {
+  padding: 0 70px;
+  min-height: calc(-244vh);
+  width: 100%;
+  background: #F6F8F9;
+  box-sizing: border-box;
+}

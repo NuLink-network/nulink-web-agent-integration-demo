@@ -1,0 +1,106 @@
+.my_strategy {
+  &_top {
+    display: flex;
+    align-items: center;
+
+    div {
+      width: 130px;
+      height: 40px;
+      font-family: PingFangSC-Semibold, PingFang SC;
+      font-weight: 600;
+      line-height: 40px;
+      border-radius: 4px;
+      text-align: center;
+      border: 1px solid #ba9756;
+      background: #fff;
+      color: #ba9756;
+      margin-left: 20px;
+      cursor: pointer;
+    }
+
+    div.active {
+      background: #ba9756;
+      color: #fff;
+    }
+  }
+
+  .oprate_text {
+    color: #ba9756;
+    font-family: PingFangSC-Medium, PingFang SC;
+    font-weight: 500;
+    cursor: pointer;
+  }
+
+  &_detail_title {
+    margin: 20px 0;
+
+    span {
+      margin-right: 74px;
+      font-size: 16px;
+      font-family: PingFangSC-Semibold, PingFang SC;
+      font-weight: 600;
+      color: #4A4A4A;
+      line-height: 22px;
+
+    }
+
+  }
+
+  .my_strategy_detail_list {
+    margin-top: -20px;
+
+    .content_box {
+      background: #FFFFFF;
+      box-shadow: 0px 0px 14px 0px rgba(212, 212, 212, 0.5);
+      border-radius: 6px;
+      border: 1px solid #ECECEC;
+      margin-right: 20px;
+      overflow: hidden;
+      margin-top: 20px;
+
+      &_middle {
+        padding: 0 10px;
+        height: 50px;
+        line-height: 50px;
+        border-bottom: 1px solid #F6F6F6;
+        ;
+      }
+
+      &_bottom {
+        padding: 0 10px;
+        display: flex;
+        justify-content: space-between;
+        height: 56px;
+        align-items: center;
+
+        .content_box_bottom_left {
+          display: flex;
+          align-items: center;
+
+          img {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 10px;
+          }
+        }
+
+        .content_box_bottom_right {
+          display: flex;
+          align-items: center;
+
+          img {
+            width: 14px;
+            height: 12px;
+            margin-right: 10px;
+          }
+        }
+      }
+
+      img {
+        width: 100%;
+        border-radius: 10px;
+      }
+    }
+  }
+}

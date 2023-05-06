@@ -1,0 +1,101 @@
+{
+  "name": "nulink-web",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@craco/craco": "^6.4.3",
+    "@emotion/react": "^11.10.4",
+    "@emotion/styled": "^11.10.4",
+    "@hcaptcha/react-hcaptcha": "^1.4.4",
+    "@mui/material": "^5.10.7",
+    "@nulink_network/nulink-web-agent-access-sdk": "^0.0.4",
+    "@testing-library/jest-dom": "^5.14.1",
+    "@testing-library/react": "^12.0.0",
+    "@testing-library/user-event": "^13.2.1",
+    "@types/jest": "^27.0.1",
+    "@types/node": "^16.7.13",
+    "@types/react": "^18.0.21",
+    "@types/react-dom": "^17.0.9",
+    "@types/react-helmet": "^6.1.5",
+    "antd": "^4.19.5",
+    "await-sleep": "0.0.1",
+    "axios": "^0.27.2",
+    "axios-retry": "^3.2.5",
+    "buffer": "^6.0.3",
+    "copy-to-clipboard": "^3.3.2",
+    "cross-env": "^7.0.3",
+    "crypto-js": "^4.1.1",
+    "dayjs": "^1.11.5",
+    "dotenv-cli": "5.1.0",
+    "encrypt-with-password": "^1.0.0",
+    "ethers": "^5.6.2",
+    "i18next": "^21.6.16",
+    "i18next-browser-languagedetector": "^6.1.4",
+    "i18next-http-backend": "^1.4.0",
+    "ipfs-core-types": "^0.11.0",
+    "ipfs-http-client": "^57.0.1",
+    "jsrsasign": "^10.7.0",
+    "node-polyfill-webpack-plugin": "^1.1.4",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "react-helmet-async": "^1.3.0",
+    "react-i18next": "^11.16.6",
+    "react-loading": "^2.0.3",
+    "react-scripts": "5.0.0",
+    "singleton-service": "^1.0.7",
+    "ts-randomstring": "^1.0.8",
+    "typescript": "^4.4.2",
+    "uuid": "^9.0.0",
+    "web-vitals": "^2.1.0",
+    "window": "^4.2.7",
+    "zustand": "^4.0.0-rc.1"
+  },
+  "scripts": {
+    "start": "cross-env PORT=8090 craco start",
+    "build": "craco build",
+    "build:dev": "dotenv -e .env.development craco build",
+    "test": "craco test",
+    "eject": "react-scripts eject",
+    "commit": "git-cz",
+    "commitizen:initial": "commitizen init cz-conventional-changelog --save --save-exact",
+    "prepare": "husky install"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown .gitignore"
+  },
+  "devDependencies": {
+    "@types/mockjs": "^1.0.6",
+    "craco-less": "^2.0.0",
+    "cz-conventional-changelog": "^3.3.0",
+    "husky": "^7.0.4",
+    "less": "^4.1.2",
+    "less-loader": "^10.2.0",
+    "lint-staged": "^12.3.7",
+    "mockjs": "^1.1.0",
+    "prettier": "^2.6.2",
+    "react-router-dom": "^6.3.0"
+  }
+}

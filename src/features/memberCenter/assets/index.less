@@ -1,0 +1,275 @@
+.member_center {
+  min-height: calc(100vh - 344px);
+  width: 100%;
+  background: #F6F8F9;
+
+  &_top {
+    padding: 50px 70px;
+    box-sizing: border-box;
+    background: linear-gradient(94deg, #ba9756 0%, #df9100 100%);
+    box-shadow: 0px -1px 0px 0px #DBDBDB;
+    display: flex;
+    justify-content: space-between;
+    align-items: top;
+    color: #fff;
+
+    .member_center_right {
+      text-align: right;
+      display: flex;
+      width: 50%;
+      justify-content: flex-end;
+
+      .self_site {
+        width: 80%;
+        display: flex;
+        flex-direction: column;
+
+        .about-me {
+          text-align: left;
+        }
+
+        .member_introduction_text {
+          text-align: left;
+        }
+
+        svg {
+          margin-right: 12px;
+        }
+
+        a {
+          color: #ffffff;
+        }
+      }
+
+      .social_sites {
+        margin-bottom: 4px;
+
+        svg {
+          margin-left: 16px;
+        }
+
+        // img {
+        //   width: 21px;
+        //   height: 21px;
+        //   border-radius: 50%;
+        //   margin-left: 22px;
+        // }
+      }
+
+    }
+
+    .member_center_left {
+      display: flex;
+      align-items: center;
+
+      .left_avatar {
+        overflow: hidden;
+        margin-right: 30px;
+
+        .left_avatar_item {
+          width: 122px;
+          height: 122px;
+          border-radius: 50%;
+          background-position: center !important;
+          background-size: cover !important;
+        }
+      }
+
+      .member_introduction {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+
+        .member_introduction_name {
+          display: flex;
+          margin-bottom: 10px;
+          font-size: 24px;
+          line-height: 30px;
+          font-family: PingFangSC-Semibold, PingFang SC;
+          font-weight: 600;
+          align-items: center;
+          justify-content: center;
+
+          .ranking_area {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            margin-left: 20px;
+
+            li {
+              margin-left: 10px;
+
+              .se {
+                width: 35px;
+                height: 35px;
+                border-radius: 50%;
+                align-items: center;
+                justify-content: center;
+                box-sizing: border-box;
+                background-color: #ffffff;
+
+                img {
+                  width: 100%;
+                  height: 100%;
+                }
+
+                span {
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  width: 100%;
+                  height: 100%;
+                  border-radius: 50%;
+                  background: linear-gradient(88.57deg, #FFEA7D -41.16%, #F19090 32.99%, #ba9756 99.49%);
+                }
+              }
+
+              &:first-child {
+                margin-left: 0;
+              }
+            }
+          }
+
+          /*           span:last-child {
+            vertical-align: top;
+            margin-left: 20px;
+            display: inline-block;
+            width: 124px;
+            height: 30px;
+            background: #F6F6F6;
+            box-shadow: 0px 2px 4px 0px rgba(199, 199, 199, 0.5);
+            border-radius: 23px;
+            color: #4A4A4A !important;
+            font-size: 14px;
+            font-weight: 400;
+            text-align: center;
+            line-height: 30px;
+            a{
+              color: #4A4A4A !important;
+            }
+          } */
+        }
+
+        // .member_introduction_text {
+        //   width: 500px;
+        //   margin-top: 200px;
+        //   border: 2px solid green !important;
+        // }
+
+        .member_social {
+          display: flex;
+          align-items: center;
+          margin-top: 20px;
+
+          .share_page {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 40px;
+            cursor: pointer;
+            white-space: nowrap;
+
+            span {
+              margin-left: 5px;
+            }
+          }
+
+          span {
+            white-space: nowrap;
+          }
+
+          ul {
+            display: flex;
+            align-items: center;
+            padding: 0;
+            margin: 0 0 0 20px;
+
+            li {
+              display: flex;
+              align-items: center;
+              list-style: none;
+              margin-left: 27px;
+
+              &:first-child {
+                margin-left: 0;
+              }
+            }
+
+            .pointer {
+              cursor: pointer;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .member_center_dataIn {
+    padding: 20px 78px;
+  }
+
+  .data-indicators-area {
+    padding: 0;
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  &_tab {
+    height: 68px;
+    background: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+
+    .member_center_tab_item.active {
+      font-family: PingFangSC-Semibold, PingFang SC;
+      font-weight: 600;
+
+      .line {
+        background: linear-gradient(88.57deg, #FFEA7D -41.16%, #F19090 32.99%, #ba9756 99.49%);
+      }
+    }
+
+    .member_center_tab_item {
+      margin-right: 53px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #4A4A4A;
+      font-size: 16px;
+      cursor: pointer;
+
+      .line {
+        margin-top: 10px;
+        width: 60px;
+        height: 2px;
+        background: transparent;
+      }
+
+      &:hover {
+        position: relative;
+
+        &::after {
+          content: '';
+          position: absolute;
+          width: 0%;
+          left: 0;
+          bottom: 0;
+          height: 2px;
+          background: linear-gradient(88.57deg, #FFEA7D -41.16%, #F19090 32.99%, #ba9756 99.49%);
+          animation: 1s slidein forwards;
+        }
+      }
+    }
+  }
+
+  &_content {
+    padding: 30px 70px;
+    background: #FAF9FF;
+  }
+}
