@@ -359,7 +359,7 @@ export const MyApprove = () => {
 
           <Form.Item
             className="label-half"
-            label={"Pre of shares"}
+            label={"Number of Proxies"}
             name="shares"
           >
             <Select
@@ -375,7 +375,7 @@ export const MyApprove = () => {
             </Select>
           </Form.Item>
 
-          <Form.Item
+          {/* <Form.Item
             className="label-half"
             label={"Pre of threshold"}
             name="ursulaThreshold"
@@ -394,7 +394,7 @@ export const MyApprove = () => {
               }
               onChange={ursulaThresholdChange}
             />
-          </Form.Item>
+          </Form.Item> */}
 
           <Form.Item
             label={t<string>("member-center-approve-modal-label-2")}
