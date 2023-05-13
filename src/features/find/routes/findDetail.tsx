@@ -16,7 +16,6 @@ import { useTranslation } from "react-i18next";
 import { useLocation } from "react-router";
 import { useNavigate } from "react-router-dom";
 import { formatDate } from "@/utils/format";
-import { getFileDetail } from "../api/find";
 import OvalButton from "@/components/Button/OvalButton";
 import {
   getFilesForApprovedAsUser,
@@ -29,7 +28,7 @@ import {
   getUserCache,
 } from "@/features/auth/api/getLoginedUserInfo";
 import {apply, ApplyInfo } from "@nulink_network/nulink-web-agent-access-sdk";
-import { download } from "@nulink_network/nulink-web-agent-access-sdk";
+import { download, getFileDetail } from "@nulink_network/nulink-web-agent-access-sdk";
 import {getData} from "@/utils/ipfs";
 
 const btnStyle = {
@@ -98,11 +97,7 @@ export const FindDetail = () => {
     }
 
     (async (user) => {
-      const params: any = {
-        file_id: passedFile.file_id,
-        consumer_id: user.accountId,
-      };
-      const result = (await getFileDetail(params)).data;
+      const result = (await getFileDetail(passedFile.file_id, user.accountId));
 
       if (!!result.creator_avatar) {
         const avatarStr = await getAvatarBase64String(result.creator_avatar);

@@ -5,7 +5,7 @@ import { defaultImage, defaultAvatarImage } from "@/utils/defaultImage";
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import { locale } from "@/config";
-import { getFileList, type FileListRequestOptions } from "../api/find";
+import { type FileListRequestOptions } from "../api/find";
 import { getThumbnailBase64 } from "@/utils/image";
 import {
   getAvatarBase64String,
@@ -13,7 +13,7 @@ import {
 } from "@/features/auth/api/getLoginedUserInfo";
 import OvalButton from "@/components/Button/OvalButton";
 import { Pagination } from "@mui/material";
-import { upload } from "@nulink_network/nulink-web-agent-access-sdk";
+import { upload, getFileList } from "@nulink_network/nulink-web-agent-access-sdk";
 
 const fileImgAreaStyle = {
   width: "75px",
@@ -65,16 +65,13 @@ export const Find = () => {
     setPageIndex(1);
     setSearchValues(values);
     let result = await getFileList({
-      ...values,
       account_id: user.accountId,
-      paginate: {
-        page: pageIndex,
-        page_size: pageSize,
-      },
       include: true,
       desc: true,
+      pageNum: pageIndex,
+      pageSize: pageSize,
     });
-    dealWithResultList(result.data);
+    dealWithResultList(result);
   };
 
   const deduplication = (arr) => {
