@@ -8,7 +8,7 @@
     "@emotion/styled": "^11.10.4",
     "@hcaptcha/react-hcaptcha": "^1.4.4",
     "@mui/material": "^5.10.7",
-    "@nulink_network/nulink-web-agent-access-sdk": "^0.0.6",
+    "@nulink_network/nulink-web-agent-access-sdk": "^0.1.1",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^12.0.0",
     "@testing-library/user-event": "^13.2.1",

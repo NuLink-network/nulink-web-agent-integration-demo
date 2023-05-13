@@ -64,13 +64,7 @@ export const Find = () => {
 
     setPageIndex(1);
     setSearchValues(values);
-    let result = await getFileList({
-      account_id: user.accountId,
-      include: true,
-      desc: true,
-      pageNum: pageIndex,
-      pageSize: pageSize,
-    });
+    let result = await getFileList(user.accountId, true, true, pageIndex, pageSize);
     dealWithResultList(result);
   };
 
@@ -119,16 +113,7 @@ export const Find = () => {
 
   const pageChange = async (e, val) => {
     setPageIndex(val);
-    let result = await getFileList({
-      ...searchValues,
-      account_id: user.accountId,
-      paginate: {
-        page: val,
-        page_size: pageSize,
-      },
-      include: true,
-      desc: true,
-    });
+    let result = await getFileList(user.accountId, true, true, pageIndex, pageSize);
     dealWithResultList(result.data);
   };
 
