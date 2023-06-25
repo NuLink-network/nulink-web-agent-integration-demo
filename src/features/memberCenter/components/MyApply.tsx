@@ -6,14 +6,13 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import { useState, useEffect } from "react";
 import { toDisplayAddress } from "@/utils/format";
-import { getFilesByStatusForAllApplyAsUser } from "../api/apply";
 import { locale } from "@/config";
 import OvalButton from "@/components/Button/OvalButton";
 import storage from "@/utils/storage";
 import { cache_user_key } from "@/features/auth/api/getLoginedUserInfo";
 import { decrypt } from "@/utils/crypto";
 import { getData } from "@/utils/ipfs";
-import { download as fileDownload } from "@nulink_network/nulink-web-agent-access-sdk";
+import { download as fileDownload, getSendApplyFiles } from "@nulink_network/nulink-web-agent-access-sdk";
 dayjs.extend(utc);
 
 const { Option } = Select;
@@ -165,31 +164,15 @@ export const MyApply = () => {
     const user = storage.getItem("userinfo");
     setStatus(value);
     setPageIndex(1);
-    const params: any = {
-      proposer_id: user?.accountId,
-      status: 0,
-      paginate: {
-        page: 1,
-        page_size: 10,
-      },
-    };
-    const result = (await getFilesByStatusForAllApplyAsUser(params)).data;
+    const result = (await getSendApplyFiles(user?.accountId, 0, 1, 10));
     setApplyList(result?.list || []);
     setTotal(result?.total || 0);
   };
   const pageChange = async (e, val) => {
     setPageIndex(val);
     const user = storage.getItem("userinfo");
-    const params: any = {
-      proposer_id: user?.accountId,
-      status: 0,
-      paginate: {
-        page: val,
-        page_size: 10,
-      },
-    };
 
-    const result = (await getFilesByStatusForAllApplyAsUser(params)).data;
+    const result = (await getSendApplyFiles(user?.accountId, 0, val, 10));
     setApplyList(result?.list || []);
     setTotal(result?.total || 0);
   };

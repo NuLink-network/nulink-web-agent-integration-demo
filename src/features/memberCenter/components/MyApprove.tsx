@@ -25,7 +25,7 @@ import { UsePopup } from "@/components/Popup";
 import Alert from "@/components/Layout/Alert";
 import storage from "@/utils/storage";
 import { cache_user_key } from "@/features/auth/api/getLoginedUserInfo";
-import { approve } from "@nulink_network/nulink-web-agent-access-sdk";
+import { approve, getIncomingApplyFiles } from "@nulink_network/nulink-web-agent-access-sdk";
 
 dayjs.extend(utc);
 
@@ -205,8 +205,7 @@ export const MyApprove = () => {
       },
     };
 
-    const approvalList = (await getFilesByStatusForAllApplyAsPublisher(params))
-      .data;
+    const approvalList = (await getIncomingApplyFiles(user?.accountId, 0, 1, 10))
     setApprovalList(approvalList?.list || []);
     setTotal(approvalList?.total || 0);
   };
@@ -222,8 +221,7 @@ export const MyApprove = () => {
         page_size: 10,
       },
     };
-    const approvalList = (await getFilesByStatusForAllApplyAsPublisher(params))
-      .data;
+    const approvalList = (await getIncomingApplyFiles(user?.accountId, 0, 1, 10))
     setApprovalList(approvalList?.list || []);
     setTotal(approvalList?.total || 0);
   };
