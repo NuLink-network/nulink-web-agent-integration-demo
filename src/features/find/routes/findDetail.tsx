@@ -28,9 +28,9 @@ import {
   getAvatarBase64String,
   getUserCache,
 } from "@/features/auth/api/getLoginedUserInfo";
-import {apply, ApplyInfo } from "@nulink_network/nulink-web-agent-access-sdk";
+import { apply, ApplyInfo } from "@nulink_network/nulink-web-agent-access-sdk";
 import { download } from "@nulink_network/nulink-web-agent-access-sdk";
-import {getData} from "@/utils/ipfs";
+import { getData } from "@/utils/ipfs";
 
 const btnStyle = {
   width: "150px",
@@ -73,7 +73,7 @@ export const FindDetail = () => {
       usageDays: values.usageDays,
     };
     await apply(applyInfo, async () => {
-      window.location.reload()
+      window.location.reload();
     });
   };
 
@@ -153,13 +153,18 @@ export const FindDetail = () => {
     setIsModalVisible(true);
   };
   const fileDownload = async () => {
-    await download(detailItem.file_id,detailItem.file_name, detailItem.file_owner_address, fileDownloadCallBack);
+    await download(
+      detailItem.file_id,
+      detailItem.file_name,
+      detailItem.file_owner_address,
+      fileDownloadCallBack,
+    );
   };
 
   const fileDownloadCallBack = async (data) => {
     try {
       if (!!data && data.url) {
-        const arraybuffer = await getData(decodeURIComponent(data.url))
+        const arraybuffer = await getData(decodeURIComponent(data.url));
         const blob = new Blob([arraybuffer], { type: "arraybuffer" });
         let url = window.URL.createObjectURL(blob);
         const link = document.createElement("a");
@@ -170,10 +175,10 @@ export const FindDetail = () => {
         link.click();
         document.body.removeChild(link);
       }
-    }catch (error){
-      throw new Error("Decryption failed, Please try again")
+    } catch (error) {
+      throw new Error("Decryption failed, Please try again");
     }
-  }
+  };
 
   const IconCom = () => {
     switch (applyStatus) {
@@ -318,7 +323,9 @@ export const FindDetail = () => {
               <div className="mart-30"></div>
             )}
 
-            {bUploader && (<div className='disabled_btn'>Disabled</div>)}
+            {bUploader && (
+              <div className="find_detail_top_right_btn">Self Download</div>
+            )}
             {!bUploader && applyStatus === 0 && buttonShow && (
               <div
                 className="find_detail_top_right_btn"
