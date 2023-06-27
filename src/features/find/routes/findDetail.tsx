@@ -151,7 +151,7 @@ export const FindDetail = () => {
     await download(
       detailItem.file_id,
       detailItem.file_name,
-      detailItem.file_owner_address,
+      detailItem.creator_address,
       fileDownloadCallBack,
     );
   };
@@ -319,7 +319,7 @@ export const FindDetail = () => {
             )}
 
             {bUploader && (
-              <div className="find_detail_top_right_btn">Self Download</div>
+              <div className="find_detail_top_right_btn" onClick={fileDownload}>Self Download</div>
             )}
             {!bUploader && applyStatus === 0 && buttonShow && (
               <div
