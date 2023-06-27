@@ -7,8 +7,10 @@ import {
   Select,
   Table,
   Tooltip,
+  Carousel,
   InputNumber,
 } from "antd";
+import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import { Pagination } from "@mui/material";
 import { t } from "i18next";
 import "../assets/myApply.less";
@@ -25,7 +27,10 @@ import { UsePopup } from "@/components/Popup";
 import Alert from "@/components/Layout/Alert";
 import storage from "@/utils/storage";
 import { cache_user_key } from "@/features/auth/api/getLoginedUserInfo";
-import { approve, getIncomingApplyFiles } from "@nulink_network/nulink-web-agent-access-sdk";
+import {
+  approve,
+  getIncomingApplyFiles,
+} from "@nulink_network/nulink-web-agent-access-sdk";
 
 dayjs.extend(utc);
 
@@ -55,7 +60,7 @@ const btnStyleOk = {
 };
 export const MyApprove = () => {
   const [form] = Form.useForm();
-  const [approvalList, setApprovalList] = useState([]);
+  const [approvalList, setApprovalList]: any = useState([]);
   const [total, setTotal] = useState(0);
   const [visible, setVisible] = useState(false);
   const pageSize = 10;
@@ -67,6 +72,8 @@ export const MyApprove = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [severity, setSeverity] = useState<AlertColor>("info");
   const [alertMessage, setAlertMessage] = useState<string>("");
+  const [selectedRows, setSelectedRows] = useState<React.Key[]>([]);
+  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   useEffect(() => {
     (async () => {
       // const params: FilesForNeedToApprovedRequestOptions = {};
@@ -79,8 +86,10 @@ export const MyApprove = () => {
   const columns = [
     {
       title: `${t<string>("member-center-approve-table-title-2")}`,
-      dataIndex: "file_name",
-      key: "file_name",
+      dataIndex: "apply_id",
+      // dataIndex: "file_name",
+      key: "apply_id",
+      // key: "file_name",
       width: 200,
       render: (_, record) => {
         return record.file_name;
@@ -136,7 +145,9 @@ export const MyApprove = () => {
       },
     },
   ];
+  const [carouselCurrent, setCarouselCurrent] = useState<number>(1);
   const [isAuditModalVisible, setIsAuditModalVisible] = useState(false);
+  const [isAuditMoreModalVisible, setIsAuditMoreModalVisible] = useState(false);
   const [isNoteModalVisible, setIsNoteModalVisible] = useState(false);
   const [useWalletParams, setUseWalletParams] =
     useState<UseWalletPayRequestOptions>();
@@ -165,10 +176,17 @@ export const MyApprove = () => {
   const approveSubmit = async () => {
     const { applyId, userAccountId } =
       useWalletParams as UseWalletPayRequestOptions;
-    await approve(applyId, userAccountId, currentRecord.proposer_address, currentRecord.days, currentRecord.remark, async () => {
-      alert("Approve Success!");
-      window.location.reload();
-    });
+    await approve(
+      applyId,
+      userAccountId,
+      currentRecord.proposer_address,
+      currentRecord.days,
+      currentRecord.remark,
+      async () => {
+        alert("Approve Success!");
+        window.location.reload();
+      },
+    );
   };
 
   const approveSuccessHandler = async (e) => {
@@ -205,7 +223,9 @@ export const MyApprove = () => {
       },
     };
 
-    const approvalList = (await getIncomingApplyFiles(user?.accountId, 0, 1, 10))
+    // const approvalList = (await getIncomingApplyFiles(user?.accountId, 0, 1, 10))
+    const approvalList = (await getFilesByStatusForAllApplyAsPublisher(params))
+      .data;
     setApprovalList(approvalList?.list || []);
     setTotal(approvalList?.total || 0);
   };
@@ -221,7 +241,7 @@ export const MyApprove = () => {
         page_size: 10,
       },
     };
-    const approvalList = (await getIncomingApplyFiles(user?.accountId, 0, 1, 10))
+    const approvalList = await getIncomingApplyFiles(user?.accountId, 0, 1, 10);
     setApprovalList(approvalList?.list || []);
     setTotal(approvalList?.total || 0);
   };
@@ -232,6 +252,22 @@ export const MyApprove = () => {
 
   const ursulaThresholdChange = async (value) => {
     setUrsulaThreshold(value);
+  };
+
+  const rowSelection = {
+    columnTitle: " ",
+    onChange: (_selectedRowKeys: React.Key[], _selectedRows) => {
+      setSelectedRows(_selectedRows);
+      setSelectedRowKeys(_selectedRowKeys);
+    },
+    getCheckboxProps: (record) => {
+      return {
+        disabled:
+          selectedRowKeys.length >= 5
+            ? selectedRowKeys.includes(record.apply_id) === false
+            : false,
+      };
+    },
   };
 
   return (
@@ -247,12 +283,23 @@ export const MyApprove = () => {
             );
           })}
         </Select>
+
+        <OvalButton
+          title={"Batch review"}
+          onClick={() => setIsAuditMoreModalVisible(true)}
+          disabled={selectedRowKeys.length < 2}
+        />
       </div>
       <div className="my_apply_table">
         <Table
           columns={columns}
           dataSource={approvalList}
           pagination={false}
+          rowKey={(record) => record.apply_id}
+          rowSelection={{
+            type: "checkbox",
+            ...rowSelection,
+          }}
           scroll={{ x: 1500 }}
         />
       </div>
@@ -340,6 +387,175 @@ export const MyApprove = () => {
           wrapperCol={{ span: 18 }}
           onFinish={async (values: ModalFormOptions) => {
             await approveSubmit();
+          }}
+        >
+          <Form.Item
+            className="label-half"
+            label={t<string>("member-center-approve-modal-label-1")}
+            name="selector"
+            initialValue={1}
+          >
+            <Radio.Group>
+              {locale.fields.approveSelector.map((option) => (
+                <Radio value={option.value}>{option.label}</Radio>
+              ))}
+            </Radio.Group>
+          </Form.Item>
+
+          <Form.Item
+            className="label-half"
+            label={"Number of Proxies"}
+            name="shares"
+          >
+            <Select
+              style={selectStyle}
+              onChange={sharesSelectHandler}
+              defaultValue={ursulaShares}
+            >
+              {locale.fields.preOfShares.map((item) => (
+                <Option key={item.label} value={item.value}>
+                  {item.label}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
+
+          {/* <Form.Item
+            className="label-half"
+            label={"Pre of threshold"}
+            name="ursulaThreshold"
+            initialValue={
+              ursulaShares * 0.4 >= 1 ? Math.floor(ursulaShares * 0.4) : 1
+            }
+          >
+            <InputNumber
+              min={1}
+              step={1}
+              style={selectStyle}
+              max={
+                Math.floor(ursulaShares * 0.5) < 1
+                  ? 1
+                  : Math.floor(ursulaShares * 0.5)
+              }
+              onChange={ursulaThresholdChange}
+            />
+          </Form.Item> */}
+
+          <Form.Item
+            label={t<string>("member-center-approve-modal-label-2")}
+            name="remark"
+          >
+            <TextArea />
+            {/* <Input type="textarea"></Input> */}
+          </Form.Item>
+          <div className="modal_btn">
+            <Button
+              style={btnStyle}
+              onClick={() => {
+                setIsAuditModalVisible(false);
+              }}
+            >
+              {t<string>("member-center-approve-modal-btn-1")}
+            </Button>
+            <Button
+              style={Object.assign({}, btnStyle, btnStyleOk)}
+              htmlType="submit"
+            >
+              {t<string>("member-center-approve-modal-btn-2")}
+            </Button>
+          </div>
+        </Form>
+      </Modal>
+      <Modal
+        title={"More Details"}
+        width="640px"
+        destroyOnClose
+        visible={isAuditMoreModalVisible}
+        centered
+        footer={null}
+        maskClosable={false}
+        className="approve_modal"
+        onCancel={() => {
+          setIsAuditMoreModalVisible(false);
+        }}
+      >
+        <Carousel
+          dots={false}
+          arrows
+          className="carousel"
+          prevArrow={<LeftOutlined />}
+          nextArrow={<RightOutlined />}
+          afterChange={(current: number) => {
+            setCarouselCurrent(current);
+          }}
+        >
+          {selectedRows.length > 0 &&
+            selectedRows.map((x: any) => (
+              <div className="file-info">
+                <div>
+                  <span>File name:</span>
+                  <span>{x?.file_name}</span>
+                </div>
+                <div>
+                  <span>{`${t("member-center-s-table-title-3")}:`}</span>
+                  <Tooltip title={x?.file_owner_address}>
+                    <span>{toDisplayAddress(x?.file_owner_address)}</span>
+                  </Tooltip>
+                </div>
+                <div>
+                  <span>{`${t("member-center-s-table-title-4")}:`}</span>
+                  <Tooltip title={x?.proposer_address}>
+                    <span>{toDisplayAddress(x?.proposer_address)}</span>
+                  </Tooltip>
+                </div>
+                <div>
+                  <span>Policy id:</span>
+                  <span>{x?.policy_id || "~"}</span>
+                </div>
+                {x?.status === 2 ? (
+                  <>
+                    <div>
+                      <span>Request time:</span>
+                      <span>
+                        {dayjs(Number(x?.created_at) * 1000)
+                          .utc()
+                          .format("YYYY-MM-DD HH:mm:ss")}
+                        (UTC)
+                      </span>
+                    </div>
+                    <div>
+                      <span>Expiration time:</span>
+                      <span>
+                        {dayjs(Number(x?.end_at) * 1000)
+                          .utc()
+                          .format("YYYY-MM-DD HH:mm:ss")}
+                        (UTC)
+                      </span>
+                    </div>
+                  </>
+                ) : (
+                  <div>
+                    <span>Request Period:</span>
+                    <span>{x?.days || "~"}</span>
+                  </div>
+                )}
+                <div>
+                  <span>Status:</span>
+                  <span>{locale.messages.fileApplyStatus[x?.status]}</span>
+                </div>
+              </div>
+            ))}
+        </Carousel>
+        {carouselCurrent + 1}/{selectedRows.length}
+        <div className="review-request-title">Review request</div>
+        <Form
+          preserve={false}
+          form={form}
+          labelAlign="left"
+          labelCol={{ span: 4, offset: 0 }}
+          wrapperCol={{ span: 18 }}
+          onFinish={async (values: ModalFormOptions) => {
+            // await approveSubmit();
           }}
         >
           <Form.Item
