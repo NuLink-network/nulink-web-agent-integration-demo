@@ -28,7 +28,7 @@ import Alert from "@/components/Layout/Alert";
 import storage from "@/utils/storage";
 import { cache_user_key } from "@/features/auth/api/getLoginedUserInfo";
 import {
-  approve,
+  batchApprove,
   getIncomingApplyFiles,
 } from "@nulink_network/nulink-web-agent-access-sdk";
 
@@ -174,18 +174,15 @@ export const MyApprove = () => {
     setOpen(false);
   };
   const approveSubmit = async () => {
-    const { applyId, userAccountId } =
-      useWalletParams as UseWalletPayRequestOptions;
-    await approve(
-      applyId,
-      userAccountId,
-      currentRecord.proposer_address,
-      currentRecord.days,
-      currentRecord.remark,
-      async () => {
-        alert("Approve Success!");
-        window.location.reload();
-      },
+    const applyArray = selectedRows.map((x: any) => {
+      return {applyId: x.apply_id, days: x.days }
+    });
+    await batchApprove(
+        applyArray,
+        async () => {
+          alert("Approve Success!");
+          window.location.reload();
+        },
     );
   };
 
@@ -224,8 +221,8 @@ export const MyApprove = () => {
     };
 
     // const approvalList = (await getIncomingApplyFiles(user?.accountId, 0, 1, 10))
-    const approvalList = (await getFilesByStatusForAllApplyAsPublisher(params))
-      .data;
+    const approvalList = await getIncomingApplyFiles(user?.accountId, 0, 1, 10);
+
     setApprovalList(approvalList?.list || []);
     setTotal(approvalList?.total || 0);
   };
@@ -555,7 +552,7 @@ export const MyApprove = () => {
           labelCol={{ span: 4, offset: 0 }}
           wrapperCol={{ span: 18 }}
           onFinish={async (values: ModalFormOptions) => {
-            // await approveSubmit();
+            await approveSubmit();
           }}
         >
           <Form.Item
