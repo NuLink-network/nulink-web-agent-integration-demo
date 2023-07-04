@@ -181,6 +181,7 @@ export const MyApprove = () => {
     await approve(
         applyId,
         currentRecord.proposer_address,
+        userAccountId,
         currentRecord.days,
         async () => {
           alert("Approve Success!");
@@ -189,7 +190,7 @@ export const MyApprove = () => {
   }
   const batchApproveSubmit = async () => {
     const applyArray = selectedRows.map((x: any) => {
-      return {applyId: x.apply_id, days: x.days }
+      return {applyId: x.apply_id, days: x.days, applyUserId: x.proposer_id }
     });
     await batchApprove(
         applyArray,
