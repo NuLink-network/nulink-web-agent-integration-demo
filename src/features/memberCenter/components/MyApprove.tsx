@@ -238,7 +238,7 @@ export const MyApprove = () => {
         page_size: 10,
       },
     };
-    const approvalList = await getIncomingApplyFiles(user?.accountId, 0, 1, 10);
+    const approvalList = await getIncomingApplyFiles(user?.accountId, 0, val, 10);
     setApprovalList(approvalList?.list || []);
     setTotal(approvalList?.total || 0);
   };
