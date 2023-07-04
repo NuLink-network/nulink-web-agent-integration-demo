@@ -274,7 +274,9 @@ export const MyApprove = () => {
     getCheckboxProps: (record) => {
       return {
         disabled:
-          selectedRowKeys.length >= 5
+          record.status === 2
+            ? true
+            : selectedRowKeys.length >= 5
             ? selectedRowKeys.includes(record.apply_id) === false
             : false,
       };
