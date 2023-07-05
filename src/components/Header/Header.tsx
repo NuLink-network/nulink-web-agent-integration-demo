@@ -1,18 +1,37 @@
 import "@/assets/style/header.less";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
+import { Select } from "antd";
 import { storage } from "@/utils/storage";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { defaultAvatarImage } from "@/utils/defaultImage";
 import { cache_user_key } from "@/features/auth/api/getLoginedUserInfo";
-
+import { ConfrimModal } from '../Modal'
 import { getUserInfo } from "@/features/auth/api/getLoginedUserInfo";
 import { setIPFSNodeUrl } from "@/utils/ipfs";
 import { repeatInterval } from "@/utils/repeatInterval";
 import Emitter from "@/lib/emitter";
 import { USERINFO_UPDATE } from "@/lib/emitter-events";
-import { connect } from "@nulink_network/nulink-web-agent-access-sdk"
+import { connect } from "@nulink_network/nulink-web-agent-access-sdk";
+
+enum NETWORK_LIST {
+  Horus = "Horus",
+  Conflux = "Conflux Espace",
+}
+
+const netWorkList: Array<any> = [
+  {
+    value: 97,
+    key: NETWORK_LIST.Horus,
+    label: "Horus (BSC Testnet)",
+  },
+  {
+    value: 71,
+    key: NETWORK_LIST.Conflux,
+    label: "Conflux eSpace Testnet",
+  },
+];
 
 export const Header = ({ setLoginUser, setLoginStatus }) => {
   const { t } = useTranslation();
@@ -22,6 +41,9 @@ export const Header = ({ setLoginUser, setLoginStatus }) => {
   const [activityKey, setActivityKey] = useState("1");
   const [user, setUser] = useState<any>();
   const [name, setName] = useState<any>("account1");
+  const [chainID,setChainID] = useState()
+  const [selectNetworkConfig, setSelectNetworkConfig] = useState<any>()
+  const [showConfirmTipModal, setShowConfirmTipModal] = useState<boolean>(false)
 
   const tabClick = (key) => {
     const path = key === "1" ? "/find" : key;
@@ -29,10 +51,26 @@ export const Header = ({ setLoginUser, setLoginStatus }) => {
     setActivityKey(key);
   };
   const gotoConnect = async () => {
-    await connect(async (data)=>{
-      window.location.reload()
+    await connect(async (data) => {
+      window.location.reload();
     });
   };
+
+  const _changeNetwork = () => {
+    if (selectNetworkConfig && selectNetworkConfig.key) {
+      setShowConfirmTipModal(false)
+      storage.setItem('chain_id', selectNetworkConfig.value);
+    }
+  }
+
+  const _onOpenModal = (v: number, obj) => {
+    setSelectNetworkConfig(obj)
+    setShowConfirmTipModal(true)
+  }
+
+  const _onClose = () => {
+    setShowConfirmTipModal(false)
+  }
 
   const loginSuccessHandler = async (e) => {
     const date = e.data;
@@ -75,7 +113,12 @@ export const Header = ({ setLoginUser, setLoginStatus }) => {
     window.location.reload();
   };
 
+  const _fetchData = () => { 
+    setChainID(storage.getItem('chain_id'))
+  }
+
   useEffect(() => {
+    _fetchData()
     Emitter.on(USERINFO_UPDATE, async (userinfo) => {
       if (!userinfo) {
         return;
@@ -103,8 +146,18 @@ export const Header = ({ setLoginUser, setLoginStatus }) => {
     };
   }, []);
 
+  if (!chainID) return <></>
+
   return (
     <div className="header">
+      {showConfirmTipModal && (
+        <ConfrimModal
+          title="Switching networks"
+          content="Are you sure you want to switch the current network?"
+          onConfirm={_changeNetwork}
+          onClose={_onClose}
+        />
+      )}
       <div className="header_title">
         <svg
           data-v-70b83f88=""
@@ -198,6 +251,12 @@ export const Header = ({ setLoginUser, setLoginStatus }) => {
         </svg>
       </div>
       <div className="header_tab">
+        <Select
+          value={chainID}
+          style={{ width: 240 }}
+          options={netWorkList}
+          onChange={_onOpenModal}
+        />
         <div
           className={activityKey === "1" ? "activity" : ""}
           onClick={() => tabClick("1")}

@@ -23,7 +23,26 @@
     align-items: center;
     color: #fff;
 
-    div {
+    .ant-select-selector {
+      border: none !important;
+      background-color: #2b3a4b !important;
+
+      .ant-select-selection-item{
+        color: #ffffff !important;
+      }
+
+      &:hover{
+        border: none !important;
+      }
+    }
+
+    .ant-select-arrow{
+      svg{
+        color: #ffffff;
+      }
+    }
+
+    >div {
       // margin-left: 30px;
       line-height: 40px;
       cursor: pointer;
