@@ -192,6 +192,10 @@ export const MyApprove = () => {
     const applyArray = selectedRows.map((x: any) => {
       return {applyId: x.apply_id, days: x.days, applyUserId: x.proposer_id }
     });
+    await batchApprove(applyArray, async () => {
+      alert("Approve Success!");
+      window.location.reload();
+    });
   };
 
   const approveSuccessHandler = async (e) => {
