@@ -179,22 +179,18 @@ export const MyApprove = () => {
     const { applyId, userAccountId } =
       useWalletParams as UseWalletPayRequestOptions;
     await approve(
-      applyId,
-      currentRecord.proposer_address,
-      currentRecord.days,
-      async () => {
-        alert("Approve Success!");
-        window.location.reload();
-      },
-    );
-  };
+        applyId,
+        currentRecord.proposer_address,
+        userAccountId,
+        currentRecord.days,
+        async () => {
+          alert("Approve Success!");
+          window.location.reload();
+        })
+  }
   const batchApproveSubmit = async () => {
     const applyArray = selectedRows.map((x: any) => {
-      return { applyId: x.apply_id, days: x.days };
-    });
-    await batchApprove(applyArray, async () => {
-      alert("Approve Success!");
-      window.location.reload();
+      return {applyId: x.apply_id, days: x.days, applyUserId: x.proposer_id }
     });
   };
 
