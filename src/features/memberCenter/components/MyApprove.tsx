@@ -175,29 +175,27 @@ export const MyApprove = () => {
     setOpen(false);
   };
 
-  const approveSubmit =  async () => {
+  const approveSubmit = async () => {
     const { applyId, userAccountId } =
-        useWalletParams as UseWalletPayRequestOptions;
+      useWalletParams as UseWalletPayRequestOptions;
     await approve(
-        applyId,
-        currentRecord.proposer_address,
-        currentRecord.days,
-        async () => {
-          alert("Approve Success!");
-          window.location.reload();
-        })
-  }
+      applyId,
+      currentRecord.proposer_address,
+      currentRecord.days,
+      async () => {
+        alert("Approve Success!");
+        window.location.reload();
+      },
+    );
+  };
   const batchApproveSubmit = async () => {
     const applyArray = selectedRows.map((x: any) => {
-      return {applyId: x.apply_id, days: x.days }
+      return { applyId: x.apply_id, days: x.days };
     });
-    await batchApprove(
-        applyArray,
-        async () => {
-          alert("Approve Success!");
-          window.location.reload();
-        },
-    );
+    await batchApprove(applyArray, async () => {
+      alert("Approve Success!");
+      window.location.reload();
+    });
   };
 
   const approveSuccessHandler = async (e) => {
@@ -252,7 +250,12 @@ export const MyApprove = () => {
         page_size: 10,
       },
     };
-    const approvalList = await getIncomingApplyFiles(user?.accountId, 0, val, 10);
+    const approvalList = await getIncomingApplyFiles(
+      user?.accountId,
+      0,
+      val,
+      10,
+    );
     setApprovalList(approvalList?.list || []);
     setTotal(approvalList?.total || 0);
   };
@@ -499,7 +502,7 @@ export const MyApprove = () => {
           prevArrow={<LeftOutlined />}
           nextArrow={<RightOutlined />}
           afterChange={(current: number) => {
-            setCarouselCurrent(current);
+            setCarouselCurrent(current + 1);
           }}
         >
           {selectedRows.length > 0 &&
@@ -559,7 +562,7 @@ export const MyApprove = () => {
               </div>
             ))}
         </Carousel>
-        {carouselCurrent + 1}/{selectedRows.length}
+        {carouselCurrent}/{selectedRows.length}
         <div className="review-request-title">Review request</div>
         <Form
           preserve={false}
