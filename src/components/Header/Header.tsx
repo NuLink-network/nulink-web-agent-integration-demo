@@ -60,6 +60,7 @@ export const Header = ({ setLoginUser, setLoginStatus }) => {
     if (selectNetworkConfig && selectNetworkConfig.key) {
       setShowConfirmTipModal(false)
       storage.setItem('chain_id', selectNetworkConfig.value);
+      _fetchData()
     }
   }
 
