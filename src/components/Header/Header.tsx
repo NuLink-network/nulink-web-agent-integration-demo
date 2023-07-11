@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { defaultAvatarImage } from "@/utils/defaultImage";
 import { cache_user_key } from "@/features/auth/api/getLoginedUserInfo";
-import { ConfrimModal } from '../Modal'
+import { ConfrimModal } from "../Modal";
 import { getUserInfo } from "@/features/auth/api/getLoginedUserInfo";
 import { setIPFSNodeUrl } from "@/utils/ipfs";
 import { repeatInterval } from "@/utils/repeatInterval";
@@ -41,9 +41,10 @@ export const Header = ({ setLoginUser, setLoginStatus }) => {
   const [activityKey, setActivityKey] = useState("1");
   const [user, setUser] = useState<any>();
   const [name, setName] = useState<any>("account1");
-  const [chainID,setChainID] = useState()
-  const [selectNetworkConfig, setSelectNetworkConfig] = useState<any>()
-  const [showConfirmTipModal, setShowConfirmTipModal] = useState<boolean>(false)
+  const [chainID, setChainID] = useState();
+  const [selectNetworkConfig, setSelectNetworkConfig] = useState<any>();
+  const [showConfirmTipModal, setShowConfirmTipModal] =
+    useState<boolean>(false);
 
   const tabClick = (key) => {
     const path = key === "1" ? "/find" : key;
@@ -58,20 +59,20 @@ export const Header = ({ setLoginUser, setLoginStatus }) => {
 
   const _changeNetwork = () => {
     if (selectNetworkConfig && selectNetworkConfig.key) {
-      setShowConfirmTipModal(false)
-      storage.setItem('chain_id', selectNetworkConfig.value);
-      _fetchData()
+      setShowConfirmTipModal(false);
+      storage.setItem("chain_id", selectNetworkConfig.value);
+      _fetchData();
     }
-  }
+  };
 
   const _onOpenModal = (v: number, obj) => {
-    setSelectNetworkConfig(obj)
-    setShowConfirmTipModal(true)
-  }
+    setSelectNetworkConfig(obj);
+    setShowConfirmTipModal(true);
+  };
 
   const _onClose = () => {
-    setShowConfirmTipModal(false)
-  }
+    setShowConfirmTipModal(false);
+  };
 
   const loginSuccessHandler = async (e) => {
     const date = e.data;
@@ -114,12 +115,12 @@ export const Header = ({ setLoginUser, setLoginStatus }) => {
     window.location.reload();
   };
 
-  const _fetchData = () => { 
-    setChainID(storage.getItem('chain_id'))
-  }
+  const _fetchData = () => {
+    setChainID(storage.getItem("chain_id"));
+  };
 
   useEffect(() => {
-    _fetchData()
+    _fetchData();
     Emitter.on(USERINFO_UPDATE, async (userinfo) => {
       if (!userinfo) {
         return;
@@ -146,8 +147,6 @@ export const Header = ({ setLoginUser, setLoginStatus }) => {
       Emitter.off(USERINFO_UPDATE, () => {});
     };
   }, []);
-
-  if (!chainID) return <></>
 
   return (
     <div className="header">
@@ -252,12 +251,14 @@ export const Header = ({ setLoginUser, setLoginStatus }) => {
         </svg>
       </div>
       <div className="header_tab">
-        <Select
-          value={chainID}
-          style={{ width: 240 }}
-          options={netWorkList}
-          onChange={_onOpenModal}
-        />
+        {chainID && (
+          <Select
+            value={chainID}
+            style={{ width: 240 }}
+            options={netWorkList}
+            onChange={_onOpenModal}
+          />
+        )}
         <div
           className={activityKey === "1" ? "activity" : ""}
           onClick={() => tabClick("1")}
