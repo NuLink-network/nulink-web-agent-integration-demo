@@ -13,7 +13,7 @@ import { setIPFSNodeUrl } from "@/utils/ipfs";
 import { repeatInterval } from "@/utils/repeatInterval";
 import Emitter from "@/lib/emitter";
 import { USERINFO_UPDATE } from "@/lib/emitter-events";
-import { connect } from "@nulink_network/nulink-web-agent-access-sdk";
+import { connect, setNetWorkChainId, getNetWorkChainId } from "@nulink_network/nulink-web-agent-access-sdk";
 
 enum NETWORK_LIST {
   Horus = "Horus",
@@ -41,7 +41,7 @@ export const Header = ({ setLoginUser, setLoginStatus }) => {
   const [activityKey, setActivityKey] = useState("1");
   const [user, setUser] = useState<any>();
   const [name, setName] = useState<any>("account1");
-  const [chainID, setChainID] = useState();
+  const [chainID, setChainID] = useState<number>();
   const [selectNetworkConfig, setSelectNetworkConfig] = useState<any>();
   const [showConfirmTipModal, setShowConfirmTipModal] =
     useState<boolean>(false);
@@ -57,11 +57,11 @@ export const Header = ({ setLoginUser, setLoginStatus }) => {
     });
   };
 
-  const _changeNetwork = () => {
+  const _changeNetwork = async () => {
     if (selectNetworkConfig && selectNetworkConfig.key) {
       setShowConfirmTipModal(false);
-      storage.setItem("chain_id", selectNetworkConfig.value);
-      _fetchData();
+      await setNetWorkChainId(selectNetworkConfig.value);
+      await _fetchData();
     }
   };
 
@@ -115,8 +115,8 @@ export const Header = ({ setLoginUser, setLoginStatus }) => {
     window.location.reload();
   };
 
-  const _fetchData = () => {
-    setChainID(storage.getItem("chain_id"));
+  const _fetchData = async () => {
+    setChainID(await getNetWorkChainId());
   };
 
   useEffect(() => {
