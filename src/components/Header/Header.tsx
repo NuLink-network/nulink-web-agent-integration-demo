@@ -13,7 +13,11 @@ import { setIPFSNodeUrl } from "@/utils/ipfs";
 import { repeatInterval } from "@/utils/repeatInterval";
 import Emitter from "@/lib/emitter";
 import { USERINFO_UPDATE } from "@/lib/emitter-events";
-import { connect, setNetWorkChainId, getNetWorkChainId } from "@nulink_network/nulink-web-agent-access-sdk";
+import {
+  connect,
+  setNetWorkChainId,
+  getNetWorkChainId,
+} from "@nulink_network/nulink-web-agent-access-sdk";
 
 enum NETWORK_LIST {
   Horus = "Horus",
@@ -60,8 +64,13 @@ export const Header = ({ setLoginUser, setLoginStatus }) => {
   const _changeNetwork = async () => {
     if (selectNetworkConfig && selectNetworkConfig.key) {
       setShowConfirmTipModal(false);
-      await setNetWorkChainId(selectNetworkConfig.value);
-      await _fetchData();
+      localStorage.setItem(
+        "nulink_agent_react_chain_id",
+        selectNetworkConfig.value,
+      );
+      window.location.reload()
+      // await setNetWorkChainId(selectNetworkConfig.value);
+      // await _fetchData();
     }
   };
 
@@ -116,7 +125,8 @@ export const Header = ({ setLoginUser, setLoginStatus }) => {
   };
 
   const _fetchData = async () => {
-    setChainID(await getNetWorkChainId());
+    // setChainID(await getNetWorkChainId());
+    setChainID(Number(localStorage.getItem("nulink_agent_react_chain_id")));
   };
 
   useEffect(() => {
