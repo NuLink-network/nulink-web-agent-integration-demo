@@ -64,13 +64,13 @@ export const Header = ({ setLoginUser, setLoginStatus }) => {
   const _changeNetwork = async () => {
     if (selectNetworkConfig && selectNetworkConfig.key) {
       setShowConfirmTipModal(false);
-      localStorage.setItem(
+      /*localStorage.setItem(
         "nulink_agent_react_chain_id",
         selectNetworkConfig.value,
       );
+      window.location.reload()*/
+      await setNetWorkChainId(selectNetworkConfig.value);
       window.location.reload()
-      // await setNetWorkChainId(selectNetworkConfig.value);
-      // await _fetchData();
     }
   };
 
@@ -125,8 +125,8 @@ export const Header = ({ setLoginUser, setLoginStatus }) => {
   };
 
   const _fetchData = async () => {
-    // setChainID(await getNetWorkChainId());
-    setChainID(Number(localStorage.getItem("nulink_agent_react_chain_id")));
+    setChainID(await getNetWorkChainId());
+    //setChainID(Number(localStorage.getItem("nulink_agent_react_chain_id")));
   };
 
   useEffect(() => {
