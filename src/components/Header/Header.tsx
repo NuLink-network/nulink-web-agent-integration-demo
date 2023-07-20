@@ -68,7 +68,7 @@ export const Header = ({ setLoginUser, setLoginStatus }) => {
         "nulink_agent_react_chain_id",
         selectNetworkConfig.value,
       );
-      window.location.reload()
+      window.location.reload();
       // await setNetWorkChainId(selectNetworkConfig.value);
       // await _fetchData();
     }
@@ -261,14 +261,14 @@ export const Header = ({ setLoginUser, setLoginStatus }) => {
         </svg>
       </div>
       <div className="header_tab">
-        {chainID && (
+        {chainID ? (
           <Select
             value={chainID}
             style={{ width: 240 }}
             options={netWorkList}
             onChange={_onOpenModal}
           />
-        )}
+        ) : null}
         <div
           className={activityKey === "1" ? "activity" : ""}
           onClick={() => tabClick("1")}
