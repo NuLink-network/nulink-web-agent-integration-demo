@@ -10,9 +10,15 @@ import Emitter from "@/lib/emitter";
 import { USERINFO_UPDATE } from "@/lib/emitter-events";
 import Alert from "@/components/Layout/Alert";
 import { AlertColor } from "@mui/material";
+import editUrl from "../assets/edit_icon.svg";
+import OvalButton from "../../../components/Button/OvalButton";
+import { useNavigate } from "react-router-dom";
+import { getUserInfo } from "../api/account";
+import { getAvatarBase64String } from "@/features/auth/api/getLoginedUserInfo";
 
 export const MemberCenter = () => {
-  const [avatar] = useState(imgUrl);
+  const navigate = useNavigate();
+  const [avatar, setAvatar] = useState(imgUrl);
   const [active, setActive] = useState("2");
   const [user, setUser] = useState<any>();
   const [open, setOpen] = useState<boolean>(false);
@@ -28,9 +34,18 @@ export const MemberCenter = () => {
     }
   };
 
-  const getUserInfo = async () => {
+  const _getUserInfo = async () => {
     const user = getUserCache();
-    setUser(user);
+    const { data: userDetailInfo } = await getUserInfo({
+      account_id: user.accountId,
+    });
+    if (!!userDetailInfo.avatar) {
+      const avatarStr = await getAvatarBase64String(userDetailInfo.avatar);
+      if (!!avatarStr) {
+        setAvatar(avatarStr);
+      }
+    }
+    setUser(userDetailInfo);
   };
 
   useEffect(() => {
@@ -39,11 +54,25 @@ export const MemberCenter = () => {
         return;
       }
     });
-    window.setTimeout(async () => await getUserInfo(), 0);
+    window.setTimeout(async () => await _getUserInfo(), 0);
   }, []);
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const editTitle = () => {
+    return (
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <img src={editUrl} alt="" />
+        <span style={{ marginLeft: "10px" }}>Edit</span>
+      </div>
+    );
   };
 
   return (
@@ -67,8 +96,15 @@ export const MemberCenter = () => {
               <div className="member_introduction_name">
                 <span>{user?.name}</span>
               </div>
-              <div>{user?.accountAddress}</div>
+              <div>{user?.ethereum_addr}</div>
             </div>
+            <OvalButton
+              title={editTitle()}
+              style={{ marginLeft: "10px" }}
+              onClick={() => {
+                navigate("/modifyData");
+              }}
+            />
           </div>
         </div>
         <div className="member_center_tab">

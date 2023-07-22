@@ -1,4 +1,7 @@
 import { baseUrl as baseURL } from './url'
+
+const username = process.env.REACT_APP_SERVER_USERNAME;
+const password = process.env.REACT_APP_SERVER_PASSWORD;
 /**
  * Get请求
  *
@@ -45,11 +48,15 @@ export function get (url, params) {
  */
 export function post (url, params?) {
   const reqParams = JSON.stringify(params)
+  const token = Buffer.from(`${username}:${password}`, "utf8").toString(
+    "base64"
+  );
   return new Promise((resolve, reject) => {
     fetch(`${baseURL}${url}`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'authorization':`Basic ${token}`
       },
       body: reqParams
     })
