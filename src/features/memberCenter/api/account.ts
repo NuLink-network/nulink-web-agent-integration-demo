@@ -61,3 +61,5 @@ export const getFilesByStatusForAllApplyAsPublisher: (args: FilesByStatusForAllA
 };
 
 export const getUserInfo = async (params) => await post('/account/get', params)
+
+export const updateUserInfo = async (params) => await post('/third-party/account/update', params)

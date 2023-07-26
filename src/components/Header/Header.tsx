@@ -261,14 +261,14 @@ export const Header = ({ setLoginUser, setLoginStatus }) => {
         </svg>
       </div>
       <div className="header_tab">
-        {chainID && (
+        {chainID ? (
           <Select
             value={chainID}
             style={{ width: 240 }}
             options={netWorkList}
             onChange={_onOpenModal}
           />
-        )}
+        ) : null}
         <div
           className={activityKey === "1" ? "activity" : ""}
           onClick={() => tabClick("1")}

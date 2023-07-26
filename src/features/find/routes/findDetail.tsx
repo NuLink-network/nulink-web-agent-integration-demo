@@ -27,9 +27,14 @@ import {
   getAvatarBase64String,
   getUserCache,
 } from "@/features/auth/api/getLoginedUserInfo";
-import {apply, ApplyInfo } from "@nulink_network/nulink-web-agent-access-sdk";
-import { download, getFileDetail } from "@nulink_network/nulink-web-agent-access-sdk";
-import {getData} from "@/utils/ipfs";
+import { apply, ApplyInfo } from "@nulink_network/nulink-web-agent-access-sdk";
+import {
+  download,
+  getFileDetail,
+} from "@nulink_network/nulink-web-agent-access-sdk";
+import { getData } from "@/utils/ipfs";
+import Alert from "@/components/Layout/Alert";
+import { AlertColor } from "@mui/material";
 
 const btnStyle = {
   width: "150px",
@@ -59,6 +64,19 @@ export const FindDetail = () => {
   const [visible, setVisible] = useState(false); // result tips popup window
   const [bUploader, setIsUploader] = useState(false); // user.id === detailItem.creator_id id the uploader
   const [user, setUser] = useState(null);
+  const [open, setOpen] = useState<boolean>(false);
+  const [severity, setSeverity] = useState<AlertColor>("info");
+  const [alertMessage, setAlertMessage] = useState<string>("");
+
+  const showMsg = (message: string, severity: AlertColor = "error") => {
+    setOpen(true);
+    setSeverity(severity);
+    setAlertMessage(message);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   /**
    * apply for file
@@ -97,7 +115,7 @@ export const FindDetail = () => {
     }
 
     (async (user) => {
-      const result = (await getFileDetail(passedFile.file_id, user.accountId));
+      const result = await getFileDetail(passedFile.file_id, user.accountId);
 
       if (!!result.creator_avatar) {
         const avatarStr = await getAvatarBase64String(result.creator_avatar);
@@ -251,7 +269,10 @@ export const FindDetail = () => {
         return (
           <OvalButton
             title={t<string>("find-detail-a-btn-2")}
-            onClick={() => applyDownload()}
+            // onClick={() => applyDownload()}
+            onClick={() => {
+              showMsg("Already applied, please wait for approval");
+            }}
           />
         );
     }
@@ -265,6 +286,12 @@ export const FindDetail = () => {
 
   return (
     <div className="find_detail marb-30">
+      <Alert
+        open={open}
+        severity={severity}
+        onClose={handleClose}
+        message={alertMessage}
+      />
       <Row className="find_detail_top">
         <Col span="12">
           <div className="find_detail_top_left">
@@ -319,7 +346,9 @@ export const FindDetail = () => {
             )}
 
             {bUploader && (
-              <div className="find_detail_top_right_btn" onClick={fileDownload}>Self Download</div>
+              <div className="find_detail_top_right_btn" onClick={fileDownload}>
+                Self Download
+              </div>
             )}
             {!bUploader && applyStatus === 0 && buttonShow && (
               <div
