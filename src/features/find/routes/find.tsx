@@ -64,7 +64,7 @@ export const Find = () => {
 
     setPageIndex(1);
     setSearchValues(values);
-    let result = await getFileList(user.accountId, true, true, pageIndex, pageSize);
+    let result = await getFileList(user.accountId, true, true, 1, pageSize);
     dealWithResultList(result);
   };
 
@@ -79,6 +79,8 @@ export const Find = () => {
   };
 
   const dealWithResultList = (result) => {
+    console.log(result.list,'辅导费', result.list.length);
+    
     setResultList([]);
     if (result.list.length > 0) {
       result.list.forEach(async (item) => {
@@ -113,8 +115,8 @@ export const Find = () => {
 
   const pageChange = async (e, val) => {
     setPageIndex(val);
-    let result = await getFileList(user.accountId, true, true, pageIndex, pageSize);
-    dealWithResultList(result.data);
+    let result = await getFileList(user.accountId, true, true, val, pageSize);
+    dealWithResultList(result);
   };
 
   useEffect(() => {
