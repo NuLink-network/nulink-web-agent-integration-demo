@@ -18,7 +18,7 @@
 2. Modify config:
   // The SDK backend testnet server address. In the NuLink testnet,
   // you can use the address: https://agent-integration-demo.nulink.org/bk
-  REACT_APP_SERVER_BASEURL=xxxxx
+  REACT_APP_CENTRALIZED_SERVER_URL=xxxxx
   // The SDK backend testnet server http(s) api base auth username and password. In the NuLink testnet,
   // you can use the address: REACT_APP_SERVER_USERNAME=nulink / REACT_APP_SERVER_PASSWORD=privacyshareisgood
   REACT_APP_SERVER_USERNAME=xxxxxx
