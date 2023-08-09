@@ -28,7 +28,7 @@ const netWorkList: Array<any> = [
   {
     value: 97,
     key: NETWORK_LIST.Horus,
-    label: "Horus (BSC Testnet)",
+    label: "Greenfield (BSC Testnet)",
   },
   // {
   //   value: 71,
