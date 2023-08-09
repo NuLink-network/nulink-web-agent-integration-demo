@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import { locale } from "@/config";
 import { type FileListRequestOptions } from "../api/find";
-import { getThumbnailBase64 } from "@/utils/image";
+import { getThumbnailBase64 } from "@/utils/imageGreenfiled";
 import {
   getAvatarBase64String,
   getUserCache,
@@ -79,8 +79,6 @@ export const Find = () => {
   };
 
   const dealWithResultList = (result) => {
-    console.log(result.list,'辅导费', result.list.length);
-    
     setResultList([]);
     if (result.list.length > 0) {
       result.list.forEach(async (item) => {

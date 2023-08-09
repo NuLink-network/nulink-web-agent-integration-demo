@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@bnb-chain/greenfield-chain-sdk": "^0.2.2",
     "@craco/craco": "^6.4.3",
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
