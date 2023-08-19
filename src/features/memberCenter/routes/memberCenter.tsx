@@ -15,6 +15,10 @@ import OvalButton from "../../../components/Button/OvalButton";
 import { useNavigate } from "react-router-dom";
 import { getUserInfo } from "../api/account";
 import { getAvatarBase64String } from "@/features/auth/api/getLoginedUserInfo";
+import {
+  sendCustomTransaction
+} from "@nulink_network/nulink-web-agent-access-sdk";
+import {getData} from "@/utils/ipfs";
 
 export const MemberCenter = () => {
   const navigate = useNavigate();
@@ -61,6 +65,18 @@ export const MemberCenter = () => {
     setOpen(false);
   };
 
+  const sendTransaction = async () => {
+    await sendCustomTransaction(sendTransactionCallBack, '0xeEFA1EADDEea7a3d9acf04D421bDb26a4725Faed', null, '10000000000000000')
+  }
+
+  const sendTransactionCallBack = async (data) => {
+    try {
+      console.log(data)
+    } catch (error) {
+      throw new Error("Decryption failed, Please try again");
+    }
+  };
+
   const editTitle = () => {
     return (
       <div
@@ -72,6 +88,20 @@ export const MemberCenter = () => {
         <img src={editUrl} alt="" />
         <span style={{ marginLeft: "10px" }}>Edit</span>
       </div>
+    );
+  };
+
+  const sendTitle = () => {
+    return (
+        <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+            }}
+        >
+          <img src={editUrl} alt="" />
+          <span style={{ marginLeft: "10px" }}>Send</span>
+        </div>
     );
   };
 
@@ -104,6 +134,11 @@ export const MemberCenter = () => {
               onClick={() => {
                 navigate("/modifyData");
               }}
+            />
+            <OvalButton
+                title={sendTitle()}
+                style={{ marginLeft: "10px" }}
+                onClick={sendTransaction}
             />
           </div>
         </div>
