@@ -27,9 +27,9 @@
   // you can use the address: https://agent-integration-demo.nulink.org/nuipfs
   REACT_APP_IPFS_NODE_URL=xxxxx
 
-  // The SDK backend testnet server address. In the NuLink testnet,
+  // The SDK agent web address. In the NuLink testnet,
   // you can use the address: https://agent.testnet.nulink.org/
-  REACT_APP_NULINK_AGENT_ADDRESS=xxxxx 
+  REACT_APP_NULINK_AGENT_URL=xxxxx 
 
 3. yarn install
 4. yarn build
