@@ -8,7 +8,7 @@
     "@emotion/styled": "^11.10.4",
     "@hcaptcha/react-hcaptcha": "^1.4.4",
     "@mui/material": "^5.10.7",
-    "@nulink_network/nulink-web-agent-access-sdk": "^0.2.7",
+    "@nulink_network/nulink-web-agent-access-sdk": "^0.2.9",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^12.0.0",
     "@testing-library/user-event": "^13.2.1",
@@ -19,6 +19,7 @@
     "@types/react-helmet": "^6.1.5",
     "antd": "^4.19.5",
     "await-sleep": "0.0.1",
+
     "axios": "^0.27.2",
     "axios-retry": "^3.2.5",
     "buffer": "^6.0.3",
