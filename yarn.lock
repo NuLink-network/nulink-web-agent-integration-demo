@@ -2430,10 +2430,10 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@nulink_network/nulink-web-agent-access-sdk@^0.3.0":
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/@nulink_network/nulink-web-agent-access-sdk/-/nulink-web-agent-access-sdk-0.3.0.tgz#7ce275bc2c89d6583fcecbb9daa84e20c08dc095"
-  integrity sha512-qySl823J4WO0eM2nvooXscBihFrYafQyGDvJGtalzWasKTTZOQvdmH1zyQmfVWJyaG3TsEieoxuxDBwK4tzsHA==
+"@nulink_network/nulink-web-agent-access-sdk@^0.3.1":
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/@nulink_network/nulink-web-agent-access-sdk/-/nulink-web-agent-access-sdk-0.3.1.tgz#cdb2b9fb4177c36302fe7d8bb9b83d260b204d48"
+  integrity sha512-wrIo+0uMLZeAaAOqmlNBDpMbCI/4tDKtv6+rnvbQvNU/UP7fqKp8akxupdJhfc6BlZLnbzT3iEl7rRvnyBribA==
   dependencies:
     "@types/crypto-js" "^4.1.1"
     "@types/jsrsasign" "^10.5.8"
