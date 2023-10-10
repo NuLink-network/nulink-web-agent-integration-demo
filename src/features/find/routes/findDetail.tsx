@@ -230,7 +230,7 @@ export const FindDetail = () => {
           </div>
         );
       case 4:
-        // application expired, out of date
+        // under review
         return (
           <div className="find_detail_apply_status_disabled">
             <ExclamationCircleFilled

@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@bnb-chain/greenfield-chain-sdk": "^0.2.2",
     "@craco/craco": "^6.4.3",
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
@@ -19,7 +20,6 @@
     "@types/react-helmet": "^6.1.5",
     "antd": "^4.19.5",
     "await-sleep": "0.0.1",
-
     "axios": "^0.27.2",
     "axios-retry": "^3.2.5",
     "buffer": "^6.0.3",
@@ -52,7 +52,8 @@
     "zustand": "^4.0.0-rc.1"
   },
   "scripts": {
-    "start": "cross-env PORT=8090 craco start",
+    "start:old": "cross-env PORT=8090 craco start",
+    "start": "serve -s build",
     "build": "craco build",
     "build:dev": "dotenv -e .env.development craco build",
     "test": "craco test",
