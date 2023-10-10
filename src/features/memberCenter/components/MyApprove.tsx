@@ -183,8 +183,12 @@ export const MyApprove = () => {
         currentRecord.proposer_address,
         userAccountId,
         currentRecord.days,
-        async () => {
-          alert("Approve Success!");
+        async (data) => {
+          if (data.result == "success"){
+            alert("Approve Success!");
+          } else {
+            alert("Approve Failed!");
+          }
           window.location.reload();
         })
   }
@@ -192,9 +196,14 @@ export const MyApprove = () => {
     const applyArray = selectedRows.map((x: any) => {
       return {applyId: x.apply_id, days: x.days, applyUserId: x.proposer_id }
     });
-    await batchApprove(applyArray, async () => {
-      alert("Approve Success!");
-      window.location.reload();
+    await batchApprove(applyArray,
+        async (data) => {
+          if (data.result == "success"){
+            alert("Approve Success!");
+          } else {
+            alert("Approve Failed!");
+          }
+          window.location.reload();
     });
   };
 
