@@ -1,5 +1,5 @@
 import { Select, Table, Tooltip, Modal } from "antd";
-import { Pagination } from "@mui/material";
+import {AlertColor, Pagination} from "@mui/material";
 import { t } from "i18next";
 import "../assets/myApply.less";
 import dayjs from "dayjs";
@@ -13,6 +13,7 @@ import { cache_user_key } from "@/features/auth/api/getLoginedUserInfo";
 import { decrypt } from "@/utils/crypto";
 import { getData } from "@/utils/ipfs";
 import { download as fileDownload, getSendApplyFiles } from "@nulink_network/nulink-web-agent-access-sdk";
+import Alert from "@/components/Layout/Alert";
 dayjs.extend(utc);
 
 const { Option } = Select;
@@ -27,10 +28,25 @@ export const MyApply = () => {
   const [status, setStatus] = useState(0);
   const [currentRecord, setCurrentRecord] = useState<any>({});
   const [isNoteModalVisible, setIsNoteModalVisible] = useState(false);
+  const [open, setOpen] = useState<boolean>(false);
+  const [severity, setSeverity] = useState<AlertColor>("info");
+  const [alertMessage, setAlertMessage] = useState<string>("");
+
   const seeNote = async (record) => {
     setIsNoteModalVisible(true);
     setCurrentRecord(record);
   };
+
+  const showMsg = (message: string, severity: AlertColor = "error") => {
+    setOpen(true);
+    setSeverity(severity);
+    setAlertMessage(message);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   useEffect(() => {
     (async () => {
       await statusSelectHandler(0);
@@ -99,6 +115,12 @@ export const MyApply = () => {
   ];
 
   const download = async (record) => {
+    const currentDate: Date = new Date();
+    const currentTimestampInSeconds: number = Math.floor(currentDate.getTime() / 1000);
+    if(currentTimestampInSeconds > record.end_at){
+      showMsg("The file has expired. Please reapply.")
+      return
+    }
     record.proposer_address = currentRecord.proposer_address;
     await fileDownload(record.file_id,record.file_name,record.file_owner_address, fileDownloadCallBack);
   };
@@ -178,6 +200,12 @@ export const MyApply = () => {
   };
   return (
     <div className="my_apply">
+      <Alert
+          open={open}
+          severity={severity}
+          onClose={handleClose}
+          message={alertMessage}
+      />
       <div className="my_apply_select">
         <Select style={selectStyle} onChange={statusSelectHandler}>
           {locale.fields.fileApplyStatus.map((item) => {
