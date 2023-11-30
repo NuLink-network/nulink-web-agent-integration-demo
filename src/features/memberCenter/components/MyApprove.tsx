@@ -19,7 +19,6 @@ import utc from "dayjs/plugin/utc";
 import { AlertColor } from "@mui/material";
 import { useState, useEffect } from "react";
 import OvalButton from "@/components/Button/OvalButton";
-import { getFilesByStatusForAllApplyAsPublisher } from "../api/account";
 import { locale } from "@/config";
 import { toDisplayAddress } from "@/utils/format";
 import { type UseWalletPayRequestOptions } from "@/features/auth/api/useWalletPay";
@@ -32,6 +31,8 @@ import {
   batchApprove,
   getIncomingApplyFiles,
 } from "@nulink_network/nulink-web-agent-access-sdk";
+import {PORTER_URI} from "@/config";
+import axios from "axios";
 
 dayjs.extend(utc);
 
@@ -67,6 +68,7 @@ export const MyApprove = () => {
   const pageSize = 10;
   const [pageIndex, setPageIndex] = useState(1);
   const [status, setStatus] = useState(0);
+  const [ursulaNumArray, setUrsulaNumArray] = useState<number[]>([]);
   const [ursulaShares, setUrsulaShares] = useState(1);
   const [ursulaThreshold, setUrsulaThreshold] = useState(1);
   const [currentRecord, setCurrentRecord] = useState<any>({});
@@ -82,6 +84,7 @@ export const MyApprove = () => {
       // console.log("getFilesForNeedToApprovedAsPublisher", result)
 
       await statusSelectHandler(0);
+      await fetchUrsula();
     })();
   }, []);
   const columns = [
@@ -175,6 +178,19 @@ export const MyApprove = () => {
     setOpen(false);
   };
 
+  const fetchUrsula = async () => {
+    const result = await axios.post(PORTER_URI + '/include/ursulas', {})
+    const numberArray:number[] = [];
+
+    let ursulaNum = result.data.result.total;
+    ursulaNum = ursulaNum > 200?100:Math.floor(ursulaNum/2);
+    setUrsulaThreshold(ursulaNum)
+    for (let i = 1; i <= ursulaNum; i++) {
+      numberArray.push(i);
+    }
+    setUrsulaNumArray(numberArray)
+  }
+
   const approveSubmit = async () => {
     const { applyId, userAccountId } =
       useWalletParams as UseWalletPayRequestOptions;
@@ -183,6 +199,7 @@ export const MyApprove = () => {
         currentRecord.proposer_address,
         userAccountId,
         currentRecord.days,
+        ursulaThreshold,
         async (data) => {
           if (data.result == "success"){
             alert("Approve Success!");
@@ -194,7 +211,7 @@ export const MyApprove = () => {
   }
   const batchApproveSubmit = async () => {
     const applyArray = selectedRows.map((x: any) => {
-      return {applyId: x.apply_id, days: x.days, applyUserId: x.proposer_id }
+      return {applyId: x.apply_id, days: x.days, applyUserId: x.proposer_id, backupNodeNum: ursulaThreshold }
     });
     await batchApprove(applyArray,
         async (data) => {
@@ -429,7 +446,7 @@ export const MyApprove = () => {
 
           <Form.Item
             className="label-half"
-            label={"Number of Proxies"}
+            label={"Number of backup nodes:"}
             name="shares"
           >
             <Select
@@ -437,9 +454,9 @@ export const MyApprove = () => {
               onChange={sharesSelectHandler}
               defaultValue={ursulaShares}
             >
-              {locale.fields.preOfShares.map((item) => (
-                <Option key={item.label} value={item.value}>
-                  {item.label}
+              {ursulaNumArray.map((item) => (
+                <Option key={item} value={item}>
+                  {item}
                 </Option>
               ))}
             </Select>
@@ -598,7 +615,7 @@ export const MyApprove = () => {
 
           <Form.Item
             className="label-half"
-            label={"Number of Proxies"}
+            label={"Number of backup nodes:"}
             name="shares"
           >
             <Select
@@ -606,9 +623,9 @@ export const MyApprove = () => {
               onChange={sharesSelectHandler}
               defaultValue={ursulaShares}
             >
-              {locale.fields.preOfShares.map((item) => (
-                <Option key={item.label} value={item.value}>
-                  {item.label}
+              {ursulaNumArray.map((item) => (
+                <Option key={item} value={item}>
+                  {item}
                 </Option>
               ))}
             </Select>
