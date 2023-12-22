@@ -30,11 +30,11 @@ const netWorkList: Array<any> = [
     key: NETWORK_LIST.Horus,
     label: "Horus (BSC Testnet)",
   },
-  {
+  /*{
     value: 71,
     key: NETWORK_LIST.Conflux,
     label: "Conflux eSpace Testnet",
-  },
+  },*/
 ];
 
 export const Header = ({ setLoginUser, setLoginStatus }) => {
