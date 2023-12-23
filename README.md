@@ -30,6 +30,10 @@
   // The SDK agent web address. In the NuLink testnet,
   // you can use the address: https://agent.testnet.nulink.org/
   REACT_APP_NULINK_AGENT_URL=xxxxx 
+  
+  // The Porter Server address in the NuLink testnet
+  // you can ues this address: https://agent.testnet.nulink.org/porter
+  REACT_APP_PORTER_URI=xxxxxx
 
 3. yarn install
 4. yarn build
