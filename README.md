@@ -17,14 +17,14 @@
 1. Rename .env.example to .env
 2. Modify config:
   // The SDK backend testnet server address. In the NuLink testnet,
-  // you can use the address: https://agent-integration-demo.nulink.org/bk
+  // you can use the address: https://agent.testnet.nulink.org/bk
   REACT_APP_CENTRALIZED_SERVER_URL=xxxxx
   // The SDK backend testnet server http(s) api base auth username and password. In the NuLink testnet,
   // you can use the address: REACT_APP_SERVER_USERNAME=nulink / REACT_APP_SERVER_PASSWORD=privacyshareisgood
   REACT_APP_SERVER_USERNAME=xxxxxx
   REACT_APP_SERVER_PASSWORD=xxxxxx
   // Your IPFS address, requires permission to write data. In the NuLink testnet,
-  // you can use the address: https://agent-integration-demo.nulink.org/nuipfs
+  // you can use the address: https://agent.testnet.nulink.org/nuipfs
   REACT_APP_IPFS_NODE_URL=xxxxx
 
   // The SDK agent web address. In the NuLink testnet,
