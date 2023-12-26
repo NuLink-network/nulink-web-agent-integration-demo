@@ -183,7 +183,7 @@ export const MyApprove = () => {
     const numberArray:number[] = [];
 
     let ursulaNum = result.data.result.total;
-    ursulaNum = ursulaNum > 200?100:Math.floor(ursulaNum/2);
+    ursulaNum = ursulaNum > 100?50:Math.floor(ursulaNum/2);
     setUrsulaThreshold(ursulaNum)
     for (let i = 1; i <= ursulaNum; i++) {
       numberArray.push(i);
@@ -287,7 +287,7 @@ export const MyApprove = () => {
   };
 
   const sharesSelectHandler = async (value) => {
-    setUrsulaShares(value);
+    setUrsulaThreshold(value);
   };
 
   const ursulaThresholdChange = async (value) => {
