@@ -184,7 +184,7 @@ export const MyApprove = () => {
 
     let ursulaNum = result.data.result.total;
     ursulaNum = ursulaNum > 100?50:Math.floor(ursulaNum/2);
-    setUrsulaThreshold(ursulaNum)
+    //setUrsulaThreshold(ursulaNum)
     for (let i = 1; i <= ursulaNum; i++) {
       numberArray.push(i);
     }
