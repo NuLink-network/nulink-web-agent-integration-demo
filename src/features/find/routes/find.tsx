@@ -1,5 +1,5 @@
 import "../assets/index.less";
-import { Row, Form, Table } from "antd";
+import {Row, Form, Table, Button} from "antd";
 import { useNavigate } from "react-router-dom";
 import { defaultImage, defaultAvatarImage } from "@/utils/defaultImage";
 import { useTranslation } from "react-i18next";
@@ -11,9 +11,11 @@ import {
   getAvatarBase64String,
   getUserCache,
 } from "@/features/auth/api/getLoginedUserInfo";
+import sleep from "await-sleep";
 import OvalButton from "@/components/Button/OvalButton";
 import { Pagination } from "@mui/material";
 import { upload, getFileList } from "@nulink_network/nulink-web-agent-access-sdk";
+import storage from "@/utils/storage";
 
 const fileImgAreaStyle = {
   width: "75px",
@@ -43,6 +45,13 @@ export const Find = () => {
 
   const [fileName] = useState<string>("");
   const [descOrder] = useState<boolean>(true);
+
+  const [fileList, setFileList] = useState<Array<any>>([])
+
+
+  const _onChangeAccountData = (e) => {
+    setFileList([...e.target.files])
+  }
 
   const toFindDetail = (fileDetail, user) => {
     navigate("/findDetail", { state: { file: fileDetail, user: user } });
@@ -79,8 +88,7 @@ export const Find = () => {
   };
 
   const dealWithResultList = (result) => {
-    console.log(result.list,'辅导费', result.list.length);
-    
+
     setResultList([]);
     if (result.list.length > 0) {
       result.list.forEach(async (item) => {
@@ -96,10 +104,10 @@ export const Find = () => {
           item.useThumbnailBase64 = true;
         } else {
           item.src = locale.messages.suffixs[item.suffix]
-            ? require(`../../../assets/img/${
-                locale.messages.suffixs[item.suffix]
+              ? require(`../../../assets/img/${
+                  locale.messages.suffixs[item.suffix]
               }.png`)
-            : null;
+              : null;
         }
         setResultList((pre) => {
           pre.push(item);
@@ -131,6 +139,80 @@ export const Find = () => {
     });
   };
 
+  const uploadSuccessHandler = async (responseData) => {
+    if(responseData.dataInfo){
+      
+    }
+  }
+
+  const arrayBufferToString = (arrayBuffer:ArrayBuffer) => {
+    const decoder = new TextDecoder('utf-8');
+    const uint8Array = new Uint8Array(arrayBuffer);
+    const string = decoder.decode(uint8Array);
+    return string;
+  }
+
+  const uploadArrayBuffer = async () => {
+    const userInfo = await storage.getItem("userinfo");
+    let arrayBufferArray:any = [];
+    arrayBufferArray = await filesToArrayBufferArray(fileList);
+    const requestData = {
+      accountAddress: userInfo.accountAddress,
+      accountId: userInfo.accountId,
+      redirectUrl: document.location.toString(),
+      chainId: 97
+    };
+    const agentWindow = window.open('http://127.0.0.1:3000' + "/upload-view?from=outside&data=" + encodeURIComponent(JSON.stringify(requestData)));
+
+    function handleMessageEvent(ev) {
+      if (ev.data == "agent_success") {
+        console.log("Receive message from Agent")
+        if (agentWindow && !agentWindow.closed) {
+          console.log("agent window is opening");
+          const message:any = {
+            action: 'upload',
+          }
+          const uploadDataList:any = []
+          for (let index = 0; index < arrayBufferArray.length; index++) {
+            let uploadData = {
+              content: '',
+              dataLabel: fileList[index].name
+            };
+            uploadData.content = arrayBufferArray[index];
+            uploadDataList.push(uploadData)
+          }
+          message["fileList"] = uploadDataList
+          agentWindow.postMessage(message, '*');
+          window.removeEventListener("message", handleMessageEvent);
+        }
+      }
+    }
+
+    window.addEventListener("message", handleMessageEvent);
+  };
+
+  const filesToArrayBufferArray = async (files: File[]) => {
+    const upFiles: ArrayBuffer[] = []
+    for (const file of files) {
+      console.log(file.name)
+      const fileBinaryArrayBuffer: ArrayBuffer = await blobToArrayBuffer(file) as ArrayBuffer
+      upFiles.push(fileBinaryArrayBuffer)
+    }
+    return upFiles
+  }
+
+  //* Convert resBlob to ArrayBuffer
+  const blobToArrayBuffer = (blob: Blob) => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onloadend = (e: any) => {
+        const fileBinaryArrayBuffer = new Uint8Array(e?.target?.result).buffer;
+        resolve(fileBinaryArrayBuffer);
+      }
+      reader.readAsArrayBuffer(blob);
+    });
+  }
+
   const _filterQuery = (key, value) => {
     const keyObj = {
       fileCategory: async () => {
@@ -146,7 +228,7 @@ export const Find = () => {
       },
       fileType: async () => {
         const [data] = locale.fields.fileType.filter(
-          (x) => x.label.toLocaleLowerCase() === value.toLocaleLowerCase(),
+            (x) => x.label.toLocaleLowerCase() === value.toLocaleLowerCase(),
         );
         setFileType(data.value);
         await search({
@@ -163,96 +245,102 @@ export const Find = () => {
   };
 
   return (
-    <div className="find_page reactive">
-      <div className="find_page_search">
-        <OvalButton
-          title={t<string>("header-a-tab-2")}
-          onClick={_uploadAction}
-        />
-      </div>
-      <div className="find_page_content">
-        <Row>
-          {resultList.length > 0 &&
-            resultList.map((file: any) => (
-              <div className="content_box" key={file.file_id}>
-                {!file.useThumbnailBase64 ? (
-                  <div
-                    className="file_img_area"
-                    onClick={() => toFindDetail(file, user)}
-                  >
-                    <img
-                      style={fileImgAreaStyle}
-                      src={file.src || defaultImage}
-                      alt=""
-                    />
-                  </div>
-                ) : (
-                  <img
-                    src={file.src}
-                    alt=""
-                    onClick={() => toFindDetail(file, user)}
-                  />
-                )}
+      <div className="find_page reactive">
+        <div className="find_page_search">
+          <input
+              multiple
+              type="file"
+              onChange={_onChangeAccountData}
+          />
+          <OvalButton
+              title={t<string>("header-a-tab-2")}
+              onClick={uploadArrayBuffer}
+          />
 
-                <div className="content_box_middle nowrap">
-                  <p>{file.file_name}</p>
-                  <div className="tag">
-                    {file.category && (
-                      <span
-                        onClick={_filterQuery.bind(
-                          this,
-                          "fileCategory",
-                          file.category,
-                        )}
-                      >
+        </div>
+        <div className="find_page_content">
+          <Row>
+            {resultList.length > 0 &&
+                resultList.map((file: any) => (
+                    <div className="content_box" key={file.file_id}>
+                      {!file.useThumbnailBase64 ? (
+                          <div
+                              className="file_img_area"
+                              onClick={() => toFindDetail(file, user)}
+                          >
+                            <img
+                                style={fileImgAreaStyle}
+                                src={file.src || defaultImage}
+                                alt=""
+                            />
+                          </div>
+                      ) : (
+                          <img
+                              src={file.src}
+                              alt=""
+                              onClick={() => toFindDetail(file, user)}
+                          />
+                      )}
+
+                      <div className="content_box_middle nowrap">
+                        <p>{file.file_name}</p>
+                        <div className="tag">
+                          {file.category && (
+                              <span
+                                  onClick={_filterQuery.bind(
+                                      this,
+                                      "fileCategory",
+                                      file.category,
+                                  )}
+                              >
                         {file.category}
                       </span>
-                    )}
-                    {file.format && (
-                      <span
-                        onClick={_filterQuery.bind(
-                          this,
-                          "fileType",
-                          file.format,
-                        )}
-                      >
+                          )}
+                          {file.format && (
+                              <span
+                                  onClick={_filterQuery.bind(
+                                      this,
+                                      "fileType",
+                                      file.format,
+                                  )}
+                              >
                         {file.format}
                       </span>
-                    )}
-                  </div>
-                </div>
-                <div className="content_box_bottom">
-                  <div className="content_box_bottom_left">
-                    <img
-                      src={file.owner_avatar || defaultAvatarImage}
-                      alt="avatar"
-                      width="256"
-                    />
-                    {file.owner}
-                  </div>
-                  <div className="content_box_bottom_right">
+                          )}
+                        </div>
+                      </div>
+                      <div className="content_box_bottom">
+                        <div className="content_box_bottom_left">
+                          <img
+                              src={file.owner_avatar || defaultAvatarImage}
+                              alt="avatar"
+                              width="256"
+                          />
+                          {file.owner}
+                        </div>
+                        <div className="content_box_bottom_right">
                     <span
-                      className="ml_4 "
-                      style={file.owned ? ownedStyle : {}}
+                        className="ml_4 "
+                        style={file.owned ? ownedStyle : {}}
                     >
                       {file.owned ? "owner" : ""}
                     </span>
-                  </div>
-                </div>
-              </div>
-            ))}
-        </Row>
-        {resultList.length === 0 && (
-          <Table dataSource={resultList} pagination={false} />
-        )}
+                        </div>
+                      </div>
+                    </div>
+                ))}
+          </Row>
+          {resultList.length === 0 && (
+              <Table dataSource={resultList} pagination={false} />
+          )}
+        </div>
+        <div className="pagination">
+          <Pagination
+              page={pageIndex}
+              count={total ? Math.ceil(total / pageSize) : 1}
+              onChange={pageChange}
+          />
+        </div>
       </div>
-      <div className="pagination">
-        <Pagination
-          page={pageIndex}
-          count={total ? Math.ceil(total / pageSize) : 1}
-          onChange={pageChange}
-        />
-      </div>
-    </div>
   );
 };

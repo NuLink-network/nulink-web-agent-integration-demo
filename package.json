@@ -35,6 +35,7 @@
     "i18next-http-backend": "^1.4.0",
     "ipfs-core-types": "^0.11.0",
     "ipfs-http-client": "^57.0.1",
+    "jimp": "^0.22.10",
     "jsrsasign": "^10.7.0",
     "node-polyfill-webpack-plugin": "^1.1.4",
     "react": "^18.0.0",
