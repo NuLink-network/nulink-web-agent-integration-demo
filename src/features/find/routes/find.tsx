@@ -162,7 +162,7 @@ export const Find = () => {
       redirectUrl: document.location.toString(),
       chainId: 97
     };
-    const agentWindow = window.open('http://127.0.0.1:3000' + "/upload-view?from=outside&data=" + encodeURIComponent(JSON.stringify(requestData)));
+    const agentWindow = window.open('http://localhost:3000' + "/upload-view?from=outside&data=" + encodeURIComponent(JSON.stringify(requestData)));
 
     function handleMessageEvent(ev) {
       if (ev.data == "agent_success") {
