@@ -4,3 +4,5 @@ export const isMock = isDevEnv && process.env.REACT_APP_API_MOCKING === "true";
 export const hCaptchaSitekey: string = process.env.REACT_APP_HCAPTCHA_SITEKEY || '';
 export { default as locale } from "./locale.en";
 export const PORTER_URI = process.env.REACT_APP_PORTER_URI as string;
+
+export const DEMO_DAPP_BACKEND_URL = process.env.REACT_APP_DEMO_DAPP_BACKEND_URL as string;

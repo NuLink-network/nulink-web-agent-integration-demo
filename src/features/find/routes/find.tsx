@@ -6,16 +6,17 @@ import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import { locale } from "@/config";
 import { type FileListRequestOptions } from "../api/find";
-import { getThumbnailBase64 } from "@/utils/image";
+import { getThumbnailBase64, setIPFSBlurThumbnail } from "@/utils/image";
 import {
   getAvatarBase64String,
   getUserCache,
 } from "@/features/auth/api/getLoginedUserInfo";
-import sleep from "await-sleep";
 import OvalButton from "@/components/Button/OvalButton";
 import { Pagination } from "@mui/material";
 import { upload, getFileList } from "@nulink_network/nulink-web-agent-access-sdk";
 import storage from "@/utils/storage";
+import axios from "axios";
+import { DEMO_DAPP_BACKEND_URL } from "@/config";
 
 const fileImgAreaStyle = {
   width: "75px",
@@ -140,8 +141,21 @@ export const Find = () => {
   };
 
   const uploadSuccessHandler = async (responseData) => {
-    if(responseData.dataInfo){
-      
+    try {
+      if(responseData.dataInfo){
+        let map:Map<string,number> = new Map();
+        responseData.dataInfo.map((data: { dataLabel: string; dataHash: number; }) => {
+          map.set(data.dataLabel, data.dataHash)
+        })
+        let dataList:any = []
+        fileList.forEach(file => {
+          const cid = setIPFSBlurThumbnail(file, file.name)
+          dataList.push({dataHash : map.get(file.name), cid: cid})
+        })
+        await axios.post(DEMO_DAPP_BACKEND_URL + '/fileThumbnail/createBatch')
+      }
+    } catch (e) {
+      console.log(e)
     }
   }
 
@@ -166,7 +180,6 @@ export const Find = () => {
 
     function handleMessageEvent(ev) {
       if (ev.data == "agent_success") {
-        console.log("Receive message from Agent")
         if (agentWindow && !agentWindow.closed) {
           console.log("agent window is opening");
           const message:any = {
@@ -183,6 +196,7 @@ export const Find = () => {
           }
           message["fileList"] = uploadDataList
           agentWindow.postMessage(message, '*');
+          console.log("send message finish")
           window.removeEventListener("message", handleMessageEvent);
         }
       }
