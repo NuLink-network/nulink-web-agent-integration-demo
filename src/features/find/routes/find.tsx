@@ -31,6 +31,10 @@ export const ownedStyle = {
   color: "black",
   background: "ghostwhite",
 };
+export type uploadData = {
+  dataLabel : string,
+  fileBinaryArrayBuffer: Blob
+}
 
 export const Find = () => {
   const pageSize = 12;
@@ -168,15 +172,18 @@ export const Find = () => {
 
   const uploadArrayBuffer = async () => {
     const userInfo = await storage.getItem("userinfo");
-    let arrayBufferArray:any = [];
-    arrayBufferArray = await filesToArrayBufferArray(fileList);
+    let uploadDataList:any = [];
+    fileList.forEach(file => {
+      uploadDataList.push({dataLabel: file.name, fileBinaryArrayBuffer: file})
+    })
+    uploadDataList = await filesToArrayBufferArray(uploadDataList);
     const requestData = {
       accountAddress: userInfo.accountAddress,
       accountId: userInfo.accountId,
       redirectUrl: document.location.toString(),
       chainId: 97
     };
-    const agentWindow = window.open('http://localhost:3000' + "/upload-view?from=outside&data=" + encodeURIComponent(JSON.stringify(requestData)));
+    const agentWindow = window.open('http://127.0.0.1:3000' + "/upload-view?from=outside&data=" + encodeURIComponent(JSON.stringify(requestData)));
 
     function handleMessageEvent(ev) {
       if (ev.data == "agent_success") {
@@ -184,15 +191,6 @@ export const Find = () => {
           console.log("agent window is opening");
           const message:any = {
             action: 'upload',
-          }
-          const uploadDataList:any = []
-          for (let index = 0; index < arrayBufferArray.length; index++) {
-            let uploadData = {
-              content: '',
-              dataLabel: fileList[index].name
-            };
-            uploadData.content = arrayBufferArray[index];
-            uploadDataList.push(uploadData)
           }
           message["fileList"] = uploadDataList
           agentWindow.postMessage(message, '*');
@@ -205,13 +203,15 @@ export const Find = () => {
     window.addEventListener("message", handleMessageEvent);
   };
 
-  const filesToArrayBufferArray = async (files: File[]) => {
-    const upFiles: ArrayBuffer[] = []
-    for (const file of files) {
-      console.log(file.name)
-      const fileBinaryArrayBuffer: ArrayBuffer = await blobToArrayBuffer(file) as ArrayBuffer
-      upFiles.push(fileBinaryArrayBuffer)
+  const filesToArrayBufferArray = async (uploadData: uploadData[]) => {
+    const upFiles: any = []
+    for (const file of uploadData) {
+      const fileBinaryArrayBuffer: ArrayBuffer = await blobToArrayBuffer(file.fileBinaryArrayBuffer) as ArrayBuffer
+      upFiles.push({ name: file.dataLabel, fileBinaryArrayBuffer })
     }
+    upFiles.forEach((x) => {
+      x.fileBinaryArrayBuffer = Buffer.from(x.fileBinaryArrayBuffer).buffer
+    })
     return upFiles
   }
 
