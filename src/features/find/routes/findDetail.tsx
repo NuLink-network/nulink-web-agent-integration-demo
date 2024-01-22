@@ -87,6 +87,8 @@ export const FindDetail = () => {
       fileCreatorAddress: detailItem.creator_address,
       fileId: detailItem.file_id,
       fileName: detailItem.file_name,
+      fileUrl: detailItem.file_url,
+      zkProof: detailItem.file_zk_poof,
       usageDays: values.usageDays,
     };
     await apply(applyInfo, async () => {

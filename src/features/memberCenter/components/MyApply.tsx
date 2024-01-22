@@ -122,18 +122,33 @@ export const MyApply = () => {
       return
     }
     record.proposer_address = currentRecord.proposer_address;
-    await fileDownload(record.file_id,record.file_name,record.file_owner_address, fileDownloadCallBack);
+    await fileDownload(record.file_id,
+        record.file_name,
+        record.file_hash,
+        record.file_owner_address,
+        record.file_zk_poof,
+        record.file_url,
+        record.file_encrypted_size,
+        fileDownloadCallBack);
   };
+
+  const stringToArrayBuffer = (str: string): ArrayBuffer => {
+    const buffer = new ArrayBuffer(str.length);
+    const uintArray = new Uint8Array(buffer);
+    for (let i = 0; i < str.length; i++) {
+      uintArray[i] = str.charCodeAt(i);
+    }
+    return buffer;
+  }
 
   const fileDownloadCallBack = async (data) => {
     try {
-      if (!!data && data.url) {
-        const arraybuffer = await getData(decodeURIComponent(data.url))
-        const blob = new Blob([arraybuffer], { type: "arraybuffer" });
-        let url = window.URL.createObjectURL(blob);
+      if (!!data && data.arrayBuffer) {
+        const blob = new Blob([data.arrayBuffer], { type: 'arraybuffer' })
+        const url = window.URL.createObjectURL(blob)
         const link = document.createElement("a");
         link.style.display = "none";
-        link.href = url;
+        link.href = url
         link.setAttribute("download", data.fileName);
         document.body.appendChild(link);
         link.click();

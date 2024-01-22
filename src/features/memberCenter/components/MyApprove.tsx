@@ -19,7 +19,7 @@ import utc from "dayjs/plugin/utc";
 import { AlertColor } from "@mui/material";
 import { useState, useEffect } from "react";
 import OvalButton from "@/components/Button/OvalButton";
-import { locale } from "@/config";
+import {locale, STAKING_SERVICE_URL, PORTER_URI} from "@/config";
 import { toDisplayAddress } from "@/utils/format";
 import { type UseWalletPayRequestOptions } from "@/features/auth/api/useWalletPay";
 import { UsePopup } from "@/components/Popup";
@@ -28,10 +28,9 @@ import storage from "@/utils/storage";
 import { cache_user_key } from "@/features/auth/api/getLoginedUserInfo";
 import {
   approve,
-  batchApprove,
   getIncomingApplyFiles,
+  getUrsulaNumber
 } from "@nulink_network/nulink-web-agent-access-sdk";
-import {PORTER_URI} from "@/config";
 import axios from "axios";
 
 dayjs.extend(utc);
@@ -179,16 +178,15 @@ export const MyApprove = () => {
   };
 
   const fetchUrsula = async () => {
-    const result = await axios.post(PORTER_URI + '/include/ursulas', {})
+
     const numberArray:number[] = [];
 
-    let ursulaNum = result.data.result.total;
-    ursulaNum = ursulaNum > 10?5:Math.floor(ursulaNum/5);
-    ursulaNum = ursulaNum == 0?1:ursulaNum
-    //setUrsulaThreshold(ursulaNum)
+    let ursulaNum = await getUrsulaNumber()
+
     for (let i = 1; i <= ursulaNum; i++) {
       numberArray.push(i);
     }
+    setUrsulaThreshold(ursulaNum)
     setUrsulaNumArray(numberArray)
   }
 
@@ -199,6 +197,9 @@ export const MyApprove = () => {
         applyId,
         currentRecord.proposer_address,
         userAccountId,
+        currentRecord.file_name,
+        currentRecord.file_hash,
+        currentRecord.file_url,
         currentRecord.days,
         ursulaThreshold,
         async (data) => {
@@ -210,7 +211,7 @@ export const MyApprove = () => {
           window.location.reload();
         })
   }
-  const batchApproveSubmit = async () => {
+ /* const batchApproveSubmit = async () => {
     const applyArray = selectedRows.map((x: any) => {
       return {applyId: x.apply_id, days: x.days, applyUserId: x.proposer_id, backupNodeNum: ursulaThreshold }
     });
@@ -223,7 +224,7 @@ export const MyApprove = () => {
           }
           window.location.reload();
     });
-  };
+  };*/
 
   const approveSuccessHandler = async (e) => {
     const responseData = e.data;
@@ -327,11 +328,11 @@ export const MyApprove = () => {
           })}
         </Select>
 
-        <OvalButton
+        {/*<OvalButton
           title={"Batch review"}
           onClick={() => setIsAuditMoreModalVisible(true)}
           disabled={selectedRowKeys.length < 2}
-        />
+        />*/}
       </div>
       <div className="my_apply_table">
         <Table
@@ -598,7 +599,7 @@ export const MyApprove = () => {
           labelCol={{ span: 4, offset: 0 }}
           wrapperCol={{ span: 18 }}
           onFinish={async (values: ModalFormOptions) => {
-            await batchApproveSubmit();
+            /*await batchApproveSubmit();*/
           }}
         >
           <Form.Item
