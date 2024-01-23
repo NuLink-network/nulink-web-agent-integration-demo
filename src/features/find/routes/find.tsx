@@ -172,7 +172,7 @@ export const Find = () => {
 
   const uploadArrayBuffer = async () => {
     await uploadFileBatch(fileList, async () => {
-      await search();
+      window.location.reload()
     })
 
     /*const userInfo = await storage.getItem("userinfo");

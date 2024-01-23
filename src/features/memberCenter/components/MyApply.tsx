@@ -198,7 +198,7 @@ export const MyApply = () => {
   };
 
   const statusSelectHandler = async (value) => {
-    const user = storage.getItem("userinfo");
+    const user = storage.getItem(cache_user_key);
     setStatus(value);
     setPageIndex(1);
     const result = (await getSendApplyFiles(user?.accountId, 0, 1, 10));
@@ -207,7 +207,7 @@ export const MyApply = () => {
   };
   const pageChange = async (e, val) => {
     setPageIndex(val);
-    const user = storage.getItem("userinfo");
+    const user = storage.getItem(cache_user_key);
 
     const result = (await getSendApplyFiles(user?.accountId, 0, val, 10));
     setApplyList(result?.list || []);

@@ -248,7 +248,7 @@ export const MyApprove = () => {
    * select action
    */
   const statusSelectHandler = async (value) => {
-    const user = storage.getItem("userinfo");
+    const user = storage.getItem("user_info");
     setStatus(value);
     setPageIndex(1);
     const params: any = {
@@ -269,7 +269,7 @@ export const MyApprove = () => {
 
   const pageChange = async (e, val) => {
     setPageIndex(val);
-    const user = storage.getItem("userinfo");
+    const user = storage.getItem("user_info");
     const params: any = {
       file_owner_id: user?.accountId,
       status: 0,
