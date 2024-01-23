@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import "./index.css";
 import "./i18n.ts";
 import App from "./App";
+import './common/common.scss'
 import reportWebVitals from "./reportWebVitals";
 
 const container = document.getElementById("root");

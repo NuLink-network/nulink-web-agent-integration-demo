@@ -11,7 +11,7 @@ type ProviderProps = {
   children: React.ReactNode;
 };
 const layoutStyle = {
-  background: "#FAF9FF",
+  background: "transparent",
 };
 export const MainLayout = ({ children }: ProviderProps) => {
   const [user, setUser] = useState<any>();

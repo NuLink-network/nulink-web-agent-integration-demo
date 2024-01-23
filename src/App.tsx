@@ -1,4 +1,4 @@
-import "./App.css";
+// import "./App.css";
 import "antd/dist/antd.min.css";
 import "./assets/style/index.less";
 import { Suspense, useEffect } from "react";

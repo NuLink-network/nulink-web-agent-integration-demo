@@ -1,0 +1,197 @@
+$themes: (
+  bgThemeColor: (
+    dark: #270c31,
+    light: #faf0ea,
+  ),
+  bgThemePic: (
+    dark: url('../assets/dark/square.svg'),
+    light: url('../assets/light/square.svg'),
+  ),
+  nuLogo: (
+    dark: url('../assets/dark/logo.svg'),
+    light: url('../assets/light/logo.svg'),
+  ),
+  themeLogo: (
+    dark: url('../assets/dark/theme.svg'),
+    light: url('../assets/light/theme.svg'),
+  ),
+  arrowDownLogo: (
+    dark: url('../assets/dark/arrow-down.svg'),
+    light: url('../assets/light/arrow-down.svg'),
+  ),
+  arrowLeftLogo: (
+    dark: url('../assets/light/arrow-left.svg'),
+    light: url('../assets/dark/arrow-left.svg'),
+  ),
+  arrowLeftTwoLogo: (
+    dark: url('../assets/dark/arrow-left-two.svg'),
+    light: url('../assets/light/arrow-left-two.svg'),
+  ),
+  arrowRightLogo: (
+    dark: url('../assets/light/arrow-right.svg'),
+    light: url('../assets/dark/arrow-right.svg'),
+  ),
+  arrowUpLogo: (
+    dark: url('../assets/dark/arrow-up.svg'),
+    light: url('../assets/light/arrow-up.svg'),
+  ),
+  arrowDefaultLogo: (
+    dark: url('../assets/dark/arrow-default.svg'),
+    light: url('../assets/light/arrow-default.svg'),
+  ),
+  walletLogo: (
+    dark: url('../assets/dark/wallet.svg'),
+    light: url('../assets/light/wallet.svg'),
+  ),
+  copyLogo: (
+    dark: url('../assets/dark/copy.svg'),
+    light: url('../assets/light/copy.svg'),
+  ),
+  copyIconLogo: (
+    dark: url('../assets/dark/copyIcon.svg'),
+    light: url('../assets/light/copyIcon.svg'),
+  ),
+  faucetLogo: (
+    dark: url('../assets/dark/faucet.svg'),
+    light: url('../assets/light/faucet.svg'),
+  ),
+  nuGuideLogo: (
+    dark: url('../assets/dark/nu-guide.svg'),
+    light: url('../assets/light/nu-guide.svg'),
+  ),
+  restoreBtnLogo: (
+    dark: url('../assets/light/restoreBtnIcon.svg'),
+    light: url('../assets/dark/restoreBtnIcon.svg'),
+  ),
+  copyBtnLogo: (
+    dark: url('../assets/light/copy-bg.svg'),
+    light: url('../assets/dark/copy-bg.svg'),
+  ),
+  earthBtnLogo: (
+    dark: url('../assets/light/earth.svg'),
+    light: url('../assets/dark/earth.svg'),
+  ),
+  viewBtnLogo: (
+    dark: url('../assets/light/view.svg'),
+    light: url('../assets/dark/view.svg'),
+  ),
+  closeBtnLogo: (
+    dark: url('../assets/light/close.svg'),
+    light: url('../assets/dark/close.svg'),
+  ),
+  copyBtn2Logo: (
+    dark: url('../assets/dark/copyBtn.svg'),
+    light: url('../assets/light/copyBtn.svg'),
+  ),
+  ui-color-text-100: (
+    dark: #fefaff,
+    light: #270c31,
+  ),
+  ui-color-neutral-white-100: (
+    dark: #270c31,
+    light: #fefaff,
+  ),
+  ui-color-neutral-white-500: (
+    dark: #fefaff,
+    light: #1a1a1b,
+  ),
+  ui-color-neutral-grey-400: (
+    dark: #a9a6a9,
+    light: #762592,
+  ),
+  ui-color-sandstone-sandstone-100: (
+    dark: #180b2a,
+    light: #e4d8f6,
+  ),
+  ui-color-indigo-indigo-300: (
+    dark: #ae87e5,
+    light: #48217f,
+  ),
+  ui-color-indigo-indigo-700: (
+    dark: #7837d4,
+    light: #e4d7f6,
+  ),
+  ui-color-indigo-indigo-800: (
+    dark: #301655,
+    light: #e4d7f6,
+  ),
+  ui-color-neutral-grey-300: (
+    dark: #c5c2c6,
+    light: #48217f,
+  ),
+  ui-color-neutral-black-900: (
+    dark: #fff,
+    light: #1a1a1b,
+  ),
+  ui-color-desc-opcity-750: (
+    dark: rgba(#fff, 0.75),
+    light: rgba(#1a1a1b, 0.75),
+  ),
+  ui-color-indigo-indigo-900: (
+    dark: #a3aed0,
+    light: #180b2a,
+  ),
+  ui-color-footer-bg: (
+    dark: #180b2a,
+    light: #faf0ea,
+  ),
+  ui-color-table-bg: (
+    dark: #180b2a,
+    light: #fefaff,
+  ),
+  ui-color-indigo-indigo-100: (
+    dark: #180b2a,
+    light: #e4d7f6,
+  ),
+  ui-color-neutral-grey-800: (
+    dark: #a3aed0,
+    light: #373637,
+  ),
+  ui-color-neutral-grey-600: (
+    dark: #a3aed0,
+    light: #706e70,
+  ),
+  ui-color-disabled-btn-bg: (
+    dark: #301655,
+    light: #ae87e5,
+  ),
+  ui-color-disabled-btn-text: (
+    dark: #a9a6a9,
+    light: #fefaff,
+  ),
+  ui-text-color-secondary: (
+    dark: #c5c2c6,
+    light: #706e70,
+  ),
+  selector-card-color-default: (
+    dark: #301655,
+    light: #faf0ea,
+  ),
+);
+
+@mixin styles($mode) {
+  @each $key, $map in $themes {
+    @each $prop, $color in $map {
+      @if $prop ==$mode {
+        --#{$key}: #{$color};
+      }
+    }
+  }
+}
+
+.dark-mode {
+  @include styles('dark');
+}
+
+.light-mode {
+  @include styles('light');
+}
+
+:root {
+  body {
+    background-repeat: repeat;
+    background-image: var(--bgThemePic);
+    background-color: var(--bgThemeColor);
+    transition: 0.5s;
+  }
+}

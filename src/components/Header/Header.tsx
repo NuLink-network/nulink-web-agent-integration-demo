@@ -13,6 +13,7 @@ import { setIPFSNodeUrl } from "@/utils/ipfs";
 import { repeatInterval } from "@/utils/repeatInterval";
 import Emitter from "@/lib/emitter";
 import { USERINFO_UPDATE } from "@/lib/emitter-events";
+import useDarkMode from "use-dark-mode";
 import {
   connect,
   setNetWorkChainId,
@@ -40,6 +41,7 @@ const netWorkList: Array<any> = [
 export const Header = ({ setLoginUser, setLoginStatus }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const darkMode = useDarkMode();
 
   const [avatar, setAvatar] = useState(defaultAvatarImage);
   const [activityKey, setActivityKey] = useState("1");
@@ -70,7 +72,7 @@ export const Header = ({ setLoginUser, setLoginStatus }) => {
       );
       window.location.reload()*/
       await setNetWorkChainId(selectNetworkConfig.value);
-      window.location.reload()
+      window.location.reload();
     }
   };
 
@@ -276,6 +278,7 @@ export const Header = ({ setLoginUser, setLoginStatus }) => {
           {t<string>("header-a-tab-1")}
           <div className="line"></div>
         </div>
+        <div className="toggle-theme mar-lr-8" onClick={darkMode.toggle} />
         {user ? (
           <>
             <div
