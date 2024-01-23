@@ -71,7 +71,7 @@ export const ModifyData = () => {
   useEffect(() => {
     (async () => {
       //get user info
-      const user = storage.getItem("userinfo");
+      const user = storage.getItem("user_info");
       setUser(user);
       if (!user) {
         return;
@@ -123,7 +123,7 @@ export const ModifyData = () => {
     //   "textAreaRefProfile:",
     //   textAreaRefProfile.current?.resizableTextArea?.textArea.value,
     // );
-    const user = storage.getItem("userinfo");
+    const user = storage.getItem("user_info");
     let data = {
       account_id: user.accountId,
       name: nickname, //inputRefNickname.current?.input?.value,
@@ -140,7 +140,7 @@ export const ModifyData = () => {
       data["avatar"] = avatarCid;
     }
 
-    const userInfo = storage.getItem("userinfo");
+    const userInfo = storage.getItem("user_info");
     setUser(userInfo);
 
     if (!user) {

@@ -87,6 +87,8 @@ export const FindDetail = () => {
       fileCreatorAddress: detailItem.creator_address,
       fileId: detailItem.file_id,
       fileName: detailItem.file_name,
+      fileUrl: detailItem.file_url,
+      zkProof: detailItem.file_zk_poof,
       usageDays: values.usageDays,
     };
     await apply(applyInfo, async () => {
@@ -167,31 +169,34 @@ export const FindDetail = () => {
   };
   const fileDownload = async () => {
     await download(
-      detailItem.file_id,
-      detailItem.file_name,
-      detailItem.creator_address,
+        detailItem.file_id,
+        detailItem.file_name,
+        detailItem.file_hash,
+        detailItem.creator_address,
+        detailItem.file_zk_poof,
+        detailItem.file_url,
+        detailItem.file_encrypted_size,
       fileDownloadCallBack,
     );
   };
 
   const fileDownloadCallBack = async (data) => {
     try {
-      if (!!data && data.url) {
-        const arraybuffer = await getData(decodeURIComponent(data.url));
-        const blob = new Blob([arraybuffer], { type: "arraybuffer" });
-        let url = window.URL.createObjectURL(blob);
+      if (!!data && data.arrayBuffer) {
+        const blob = new Blob([data.arrayBuffer], { type: 'arraybuffer' })
+        const url = window.URL.createObjectURL(blob)
         const link = document.createElement("a");
         link.style.display = "none";
-        link.href = url;
+        link.href = url
         link.setAttribute("download", data.fileName);
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
       }
-    } catch (error) {
-      throw new Error("Decryption failed, Please try again");
+    }catch (error){
+      throw new Error("Decryption failed, Please try again")
     }
-  };
+  }
 
   const IconCom = () => {
     switch (applyStatus) {

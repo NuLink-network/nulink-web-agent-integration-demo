@@ -12,7 +12,7 @@ export const getLoginedUserInfo = async (): Promise<any> => {
   return isNotEmptyObject(result) ? result : null;
 };
 
-export const cache_user_key: string = "userinfo";
+export const cache_user_key: string = "user_info";
 
 export const cache_user_details_key: string = "userdetails";
 

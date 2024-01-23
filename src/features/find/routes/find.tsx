@@ -13,7 +13,7 @@ import {
 } from "@/features/auth/api/getLoginedUserInfo";
 import OvalButton from "@/components/Button/OvalButton";
 import { Pagination } from "@mui/material";
-import { upload, getFileList } from "@nulink_network/nulink-web-agent-access-sdk";
+import { upload, getFileList, uploadFileBatch } from "@nulink_network/nulink-web-agent-access-sdk";
 import storage from "@/utils/storage";
 import axios from "axios";
 import { DEMO_DAPP_BACKEND_URL } from "@/config";
@@ -171,7 +171,11 @@ export const Find = () => {
   }
 
   const uploadArrayBuffer = async () => {
-    const userInfo = await storage.getItem("userinfo");
+    await uploadFileBatch(fileList, async () => {
+      window.location.reload()
+    })
+
+    /*const userInfo = await storage.getItem("userinfo");
     let uploadDataList:any = [];
     fileList.forEach(file => {
       uploadDataList.push({dataLabel: file.name, fileBinaryArrayBuffer: file})
@@ -200,7 +204,7 @@ export const Find = () => {
       }
     }
 
-    window.addEventListener("message", handleMessageEvent);
+    window.addEventListener("message", handleMessageEvent);*/
   };
 
   const filesToArrayBufferArray = async (uploadData: uploadData[]) => {
@@ -208,6 +212,18 @@ export const Find = () => {
     for (const file of uploadData) {
       const fileBinaryArrayBuffer: ArrayBuffer = await blobToArrayBuffer(file.fileBinaryArrayBuffer) as ArrayBuffer
       upFiles.push({ name: file.dataLabel, fileBinaryArrayBuffer })
+    }
+    upFiles.forEach((x) => {
+      x.fileBinaryArrayBuffer = Buffer.from(x.fileBinaryArrayBuffer).buffer
+    })
+    return upFiles
+  }
+
+  const convertFileToUploadData = async (files : File[]) => {
+    const upFiles: any = []
+    for (const file of files) {
+      const fileBinaryArrayBuffer: ArrayBuffer = await blobToArrayBuffer(file) as ArrayBuffer
+      upFiles.push({ name: file.name, fileBinaryArrayBuffer })
     }
     upFiles.forEach((x) => {
       x.fileBinaryArrayBuffer = Buffer.from(x.fileBinaryArrayBuffer).buffer
