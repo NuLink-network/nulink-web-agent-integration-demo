@@ -1,17 +1,17 @@
 .member_center {
   min-height: calc(100vh - 344px);
   width: 100%;
-  background: #F6F8F9;
 
   &_top {
     padding: 50px 70px;
     box-sizing: border-box;
-    background: linear-gradient(94deg, #ba9756 0%, #df9100 100%);
-    box-shadow: 0px -1px 0px 0px #DBDBDB;
+    // background: linear-gradient(94deg, #ba9756 0%, #df9100 100%);
+    background: var(--ui-color-indigo-indigo-100);
+    // box-shadow: 0px -1px 0px 0px #DBDBDB;
     display: flex;
     justify-content: space-between;
     align-items: top;
-    color: #fff;
+    color: var(--ui-color-neutral-black-900);
 
     .member_center_right {
       text-align: right;
@@ -110,7 +110,7 @@
                 align-items: center;
                 justify-content: center;
                 box-sizing: border-box;
-                background-color: #ffffff;
+                // background-color: #ffffff;
 
                 img {
                   width: 100%;
@@ -270,12 +270,32 @@
 
   &_content {
     padding: 30px 70px;
-    background: #FAF9FF;
+    background: transparent;
+    // background: #FAF9FF;
+    background: var(--ui-color-indigo-indigo-100);
 
     .my_apply_select{
       display: flex;
       align-items: center;
       justify-content: space-between;
+    }
+
+    .ant-table-content{
+
+      .ant-table-tbody{
+        
+      }
+
+      .ant-table-tbody{
+        background: var(--ui-color-indigo-indigo-100);
+        .ant-table-placeholder{
+          &:hover{
+            >td{
+              background: unset;
+            }
+          }
+        }
+      }
     }
   }
 }

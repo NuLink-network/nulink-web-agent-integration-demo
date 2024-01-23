@@ -1,4 +1,7 @@
 .login {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
   min-height: calc(100vh - 90px);
   // min-height: calc(100vh - 344px);
   line-height: $min-height;
@@ -6,9 +9,10 @@
   text-align: center;
   font-size: 4em;
   color: #383434ca;
-  background-image: url('../img/login_bg.png');
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
+  padding-top: 10%;
+  // background-image: url('../img/login_bg.png');
+  // background-size: 100% 100%;
+  // background-repeat: no-repeat;
 
   .loading {
     color: #bbb;
@@ -43,7 +47,7 @@
       font-size: 18px;
       line-height: 24px;
       text-align: center;
-      color: #333333;
+      color: var(--ui-text-color-secondary);
       margin-top: 32px;
     }
 
