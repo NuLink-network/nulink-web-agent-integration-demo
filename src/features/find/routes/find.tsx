@@ -138,12 +138,6 @@ export const Find = () => {
     })();
   }, [navigate]);
 
-  const _uploadAction = async () => {
-    await upload(async (data) => {
-      window.location.reload()
-    });
-  };
-
   const uploadSuccessHandler = async (responseData) => {
     try {
       if(responseData.dataInfo){
@@ -212,18 +206,6 @@ export const Find = () => {
     for (const file of uploadData) {
       const fileBinaryArrayBuffer: ArrayBuffer = await blobToArrayBuffer(file.fileBinaryArrayBuffer) as ArrayBuffer
       upFiles.push({ name: file.dataLabel, fileBinaryArrayBuffer })
-    }
-    upFiles.forEach((x) => {
-      x.fileBinaryArrayBuffer = Buffer.from(x.fileBinaryArrayBuffer).buffer
-    })
-    return upFiles
-  }
-
-  const convertFileToUploadData = async (files : File[]) => {
-    const upFiles: any = []
-    for (const file of files) {
-      const fileBinaryArrayBuffer: ArrayBuffer = await blobToArrayBuffer(file) as ArrayBuffer
-      upFiles.push({ name: file.name, fileBinaryArrayBuffer })
     }
     upFiles.forEach((x) => {
       x.fileBinaryArrayBuffer = Buffer.from(x.fileBinaryArrayBuffer).buffer
