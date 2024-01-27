@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import { locale } from "@/config";
 import { type FileListRequestOptions } from "../api/find";
-import { getThumbnailBase64, setIPFSBlurThumbnail } from "@/utils/image";
+import {checkImgType, generateBlurThumbnail, getThumbnailBase64, setIPFSBlurThumbnail} from "@/utils/image";
 import {
   getAvatarBase64String,
   getUserCache,
@@ -17,6 +17,7 @@ import { upload, getFileList, uploadFileBatch } from "@nulink_network/nulink-web
 import storage from "@/utils/storage";
 import axios from "axios";
 import { DEMO_DAPP_BACKEND_URL } from "@/config";
+import {setData as setIPFSData} from "@/utils/ipfs";
 
 const fileImgAreaStyle = {
   width: "75px",
@@ -104,9 +105,19 @@ export const Find = () => {
           }
         }
 
-        if (!!item.thumbnail) {
-          item.src = await getThumbnailBase64(item.thumbnail);
-          item.useThumbnailBase64 = true;
+        if (checkImgType(item.file_name)){
+          const response = await axios.get(DEMO_DAPP_BACKEND_URL + '/fileThumbnail/findThumbnailByHash/' + item.file_hash)
+          const cid = response.data.data
+          if (!!cid){
+            item.src = await getThumbnailBase64(cid);
+            item.useThumbnailBase64 = true;
+          } else {
+            item.src = locale.messages.suffixs[item.suffix]
+                ? require(`../../../assets/img/${
+                    locale.messages.suffixs[item.suffix]
+                }.png`)
+                : null;
+          }
         } else {
           item.src = locale.messages.suffixs[item.suffix]
               ? require(`../../../assets/img/${
@@ -114,6 +125,18 @@ export const Find = () => {
               }.png`)
               : null;
         }
+
+        /*if (!!item.thumbnail) {
+          item.src = await getThumbnailBase64(item.thumbnail);
+          item.useThumbnailBase64 = true;
+        } else {
+
+          item.src = locale.messages.suffixs[item.suffix]
+              ? require(`../../../assets/img/${
+                  locale.messages.suffixs[item.suffix]
+              }.png`)
+              : null;
+        }*/
         setResultList((pre) => {
           pre.push(item);
           return deduplication(pre).sort((a, b) => b.created_at - a.created_at);
@@ -146,11 +169,20 @@ export const Find = () => {
           map.set(data.dataLabel, data.dataHash)
         })
         let dataList:any = []
-        fileList.forEach(file => {
-          const cid = setIPFSBlurThumbnail(file, file.name)
+        const uploadData = await convertFileToUploadData(fileList)
+        for (const data of uploadData) {
+          if (checkImgType(data.name)){
+            const cid = await setIPFSBlurThumbnail(data.fileBinaryArrayBuffer, data.name)
+            dataList.push({dataHash : map.get(data.name), cid: cid})
+          }
+        }
+        /*for (let file of fileList) {
+          const buffer = await generateBlurThumbnail(file, 180, 180, 6)
+          const cid = await setIPFSData(buffer)
           dataList.push({dataHash : map.get(file.name), cid: cid})
-        })
-        await axios.post(DEMO_DAPP_BACKEND_URL + '/fileThumbnail/createBatch')
+        }*/
+        await axios.post(DEMO_DAPP_BACKEND_URL + '/fileThumbnail/createBatch', dataList)
+        window.location.reload()
       }
     } catch (e) {
       console.log(e)
@@ -165,47 +197,18 @@ export const Find = () => {
   }
 
   const uploadArrayBuffer = async () => {
-    await uploadFileBatch(fileList, async () => {
-      window.location.reload()
-    })
-
-    /*const userInfo = await storage.getItem("userinfo");
-    let uploadDataList:any = [];
-    fileList.forEach(file => {
-      uploadDataList.push({dataLabel: file.name, fileBinaryArrayBuffer: file})
-    })
-    uploadDataList = await filesToArrayBufferArray(uploadDataList);
-    const requestData = {
-      accountAddress: userInfo.accountAddress,
-      accountId: userInfo.accountId,
-      redirectUrl: document.location.toString(),
-      chainId: 97
-    };
-    const agentWindow = window.open('http://127.0.0.1:3000' + "/upload-view?from=outside&data=" + encodeURIComponent(JSON.stringify(requestData)));
-
-    function handleMessageEvent(ev) {
-      if (ev.data == "agent_success") {
-        if (agentWindow && !agentWindow.closed) {
-          console.log("agent window is opening");
-          const message:any = {
-            action: 'upload',
-          }
-          message["fileList"] = uploadDataList
-          agentWindow.postMessage(message, '*');
-          console.log("send message finish")
-          window.removeEventListener("message", handleMessageEvent);
-        }
-      }
+    try {
+      await uploadFileBatch(fileList, uploadSuccessHandler)
+    } catch (e){
+      console.error(e)
     }
-
-    window.addEventListener("message", handleMessageEvent);*/
   };
 
-  const filesToArrayBufferArray = async (uploadData: uploadData[]) => {
+  const convertFileToUploadData = async (files : File[]) => {
     const upFiles: any = []
-    for (const file of uploadData) {
-      const fileBinaryArrayBuffer: ArrayBuffer = await blobToArrayBuffer(file.fileBinaryArrayBuffer) as ArrayBuffer
-      upFiles.push({ name: file.dataLabel, fileBinaryArrayBuffer })
+    for (const file of files) {
+      const fileBinaryArrayBuffer: ArrayBuffer = await blobToArrayBuffer(file) as ArrayBuffer
+      upFiles.push({ name: file.name, fileBinaryArrayBuffer })
     }
     upFiles.forEach((x) => {
       x.fileBinaryArrayBuffer = Buffer.from(x.fileBinaryArrayBuffer).buffer

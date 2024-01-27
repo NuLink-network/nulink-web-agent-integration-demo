@@ -1,7 +1,7 @@
 import { getData as getIPFSData, setData as setIPFSData } from "./ipfs";
 import Jimp from "jimp";
 import {isBlank} from "@/utils/null";
-
+import * as StackBlur from "stackblur-canvas"
 
 export const getThumbnailBase64 = async (cid: string): Promise<string> => {
   cid = cid.trim();
@@ -39,7 +39,7 @@ export interface ThumbailResult {
   mimeType: string;
 }
 
-const checkImgType = (fileName: string) => {
+export const checkImgType = (fileName: string) => {
   if (!/\.(jpg|jpeg|png|gif|bmp|tiff)$/i.test(fileName)) { //i: ignore case
     return false;
   } else {
@@ -114,3 +114,49 @@ export const getBlurThumbnail = async (
   });
 };
 
+export const generateBlurThumbnail = (file:File, thumbnailWidth: number, thumbnailHeight: number, blurRadius: number): Promise<ArrayBuffer> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      const image = new Image();
+
+      image.onload = () => {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = thumbnailWidth;
+        canvas.height = thumbnailHeight;
+
+        if (!!ctx){
+          ctx.drawImage(image, 0, 0, thumbnailWidth, thumbnailHeight);
+
+          StackBlur.canvasRGBA(canvas, 0, 0, thumbnailWidth, thumbnailHeight, blurRadius);
+
+          canvas.toBlob((blob) => {
+            if (blob) {
+              const reader = new FileReader();
+
+              reader.onloadend = () => {
+                if (reader.result instanceof ArrayBuffer) {
+                  resolve(reader.result);
+                } else {
+                  reject(new Error('Failed to convert blob to ArrayBuffer.'));
+                }
+              };
+
+              reader.onerror = reject;
+              reader.readAsArrayBuffer(blob);
+            } else {
+              reject(new Error('Failed to generate blob.'));
+            }
+          }, 'image/jpeg', 0.8);
+        }
+      };
+      image.onerror = reject;
+      image.src = reader.result as string;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+};

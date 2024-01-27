@@ -17,6 +17,19 @@ module.exports = {
         );
 
       webpackConfig.resolve.plugins.splice(scopePluginIndex, 1);
+      webpackConfig.resolve.fallback = {
+        // fs: require.resolve("fs"),
+        fs: false,
+        path: require.resolve("path-browserify"),
+        crypto: require.resolve("crypto-browserify"),
+        assert: require.resolve("assert/"),
+        http: require.resolve("stream-http"),
+        https: require.resolve("https-browserify"),
+        url: require.resolve("url/"),
+        os: require.resolve("os-browserify/browser"),
+        buffer: require.resolve("buffer"),
+        stream: require.resolve("stream-browserify"),
+      };
       return webpackConfig;
     },
 
@@ -47,15 +60,15 @@ module.exports = {
       }),*/
     ],
     devServer: {
-      open: false,
-      // proxy: {
-      //   "/api/":
-      //   {
-      //     target: "http://dev_domain.com",
-      //     changeOrigin: true,
-      //     pathRewrite: { "^/api": "" },
-      //   }
-      // },
+      historyApiFallback: true,
+      host: "127.0.0.1",
+      port: 8090,
+      stats: "errors-only",
+      overlay: true,
+      hot: true,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+      },
     },
   },
 

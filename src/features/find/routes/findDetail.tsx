@@ -153,7 +153,9 @@ export const FindDetail = () => {
       // get approved file list as account used
       const approveParams: FilesForApprovedAsUserRequestOptions = {};
       const approved = await getFilesForApprovedAsUser(approveParams);
-      setApprovedFileList(approved.list);
+      if (approved?.list){
+        await setApprovedFileList(approved.list);
+      }
     })(user);
   };
 
