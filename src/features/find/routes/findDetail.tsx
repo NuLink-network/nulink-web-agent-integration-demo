@@ -286,6 +286,12 @@ export const FindDetail = () => {
   };
 
   const fileImgAreaStyle = {
+    width: "100%",
+    height: "100%",
+    display: "inline-block",
+  };
+
+  const fileImgAreaOriStyle = {
     width: "75px",
     height: "fit-content",
     display: "inline-block",
@@ -305,7 +311,7 @@ export const FindDetail = () => {
             {!detailItem.thumbnail ? (
               <div className="file_img_area">
                 <img
-                  style={fileImgAreaStyle}
+                  style={detailItem.src?fileImgAreaStyle:fileImgAreaOriStyle}
                   src={detailItem.src || defaultImage}
                   alt=""
                 />
