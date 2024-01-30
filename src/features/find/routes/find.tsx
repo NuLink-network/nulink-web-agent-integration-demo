@@ -17,7 +17,22 @@ import { upload, getFileList, uploadFileBatch } from "@nulink_network/nulink-web
 import storage from "@/utils/storage";
 import axios from "axios";
 import { DEMO_DAPP_BACKEND_URL } from "@/config";
-import {setData as setIPFSData} from "@/utils/ipfs";
+import { setData as setIPFSData } from "@/utils/ipfs";
+import { styled } from '@mui/material/styles';
+import MuiButton from '@mui/material/Button';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+
+const VisuallyHiddenInput = styled('input')({
+  clip: 'rect(0 0 0 0)',
+  clipPath: 'inset(50%)',
+  height: 1,
+  overflow: 'hidden',
+  position: 'absolute',
+  bottom: 0,
+  left: 0,
+  whiteSpace: 'nowrap',
+  width: 1,
+});
 
 const fileImgAreaStyle = {
   width: "75px",
@@ -260,102 +275,130 @@ export const Find = () => {
   };
 
   return (
-      <div className="find_page reactive">
-        <div className="find_page_search">
-          <input
+    <div className="find_page reactive">
+      <div className="find_page_search">
+        {/* <input
               multiple
               type="file"
               onChange={_onChangeAccountData}
-          />
-          <OvalButton
-              title={t<string>("header-a-tab-2")}
-              onClick={uploadArrayBuffer}
-          />
-
+          /> */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <MuiButton
+            component="label"
+            variant="contained"
+            startIcon={<CloudUploadIcon />}
+            style={{
+              background: '#ba9756',
+              borderRadius: 20
+            }}
+          >
+            {t<string>("header-a-tab-2")}
+            <VisuallyHiddenInput
+              multiple
+              type="file"
+              onChange={_onChangeAccountData}
+            />
+          </MuiButton>
+          <div style={{ marginLeft: 10 }}>
+            {fileList.length > 1
+              ? `${fileList.length} ${t<string>("header-a-tab-2-2")}`
+              : fileList[0]?.name}
+          </div>
         </div>
-        <div className="find_page_content">
-          <Row>
-            {resultList.length > 0 &&
-                resultList.map((file: any) => (
-                    <div className="content_box" key={file.file_id}>
-                      {!file.useThumbnailBase64 ? (
-                          <div
-                              className="file_img_area"
-                              onClick={() => toFindDetail(file, user)}
-                          >
-                            <img
-                                style={fileImgAreaStyle}
-                                src={file.src || defaultImage}
-                                alt=""
-                            />
-                          </div>
-                      ) : (
-                          <img
-                              src={file.src}
-                              alt=""
-                              onClick={() => toFindDetail(file, user)}
-                          />
-                      )}
 
-                      <div className="content_box_middle nowrap">
-                        <p>{file.file_name}</p>
-                        <div className="tag">
-                          {file.category && (
-                              <span
-                                  onClick={_filterQuery.bind(
-                                      this,
-                                      "fileCategory",
-                                      file.category,
-                                  )}
-                              >
+        <OvalButton
+          title={t<string>("header-a-tab-2-1")}
+          onClick={uploadArrayBuffer}
+        />
+      </div>
+      <div className="find_page_content">
+        <Row>
+          {resultList.length > 0 &&
+            resultList.map((file: any) => (
+              <div className="content_box" key={file.file_id}>
+                {!file.useThumbnailBase64 ? (
+                  <div
+                    className="file_img_area"
+                    onClick={() => toFindDetail(file, user)}
+                  >
+                    <img
+                      style={fileImgAreaStyle}
+                      src={file.src || defaultImage}
+                      alt=""
+                    />
+                  </div>
+                ) : (
+                  <img
+                    src={file.src}
+                    alt=""
+                    onClick={() => toFindDetail(file, user)}
+                  />
+                )}
+
+                <div className="content_box_middle nowrap">
+                  <p>{file.file_name}</p>
+                  <div className="tag">
+                    {file.category && (
+                      <span
+                        onClick={_filterQuery.bind(
+                          this,
+                          "fileCategory",
+                          file.category,
+                        )}
+                      >
                         {file.category}
                       </span>
-                          )}
-                          {file.format && (
-                              <span
-                                  onClick={_filterQuery.bind(
-                                      this,
-                                      "fileType",
-                                      file.format,
-                                  )}
-                              >
+                    )}
+                    {file.format && (
+                      <span
+                        onClick={_filterQuery.bind(
+                          this,
+                          "fileType",
+                          file.format,
+                        )}
+                      >
                         {file.format}
                       </span>
-                          )}
-                        </div>
-                      </div>
-                      <div className="content_box_bottom">
-                        <div className="content_box_bottom_left">
-                          <img
-                              src={file.owner_avatar || defaultAvatarImage}
-                              alt="avatar"
-                              width="256"
-                          />
-                          {file.owner}
-                        </div>
-                        <div className="content_box_bottom_right">
+                    )}
+                  </div>
+                </div>
+                <div className="content_box_bottom">
+                  <div className="content_box_bottom_left">
+                    <img
+                      src={file.owner_avatar || defaultAvatarImage}
+                      alt="avatar"
+                      width="256"
+                    />
+                    {file.owner}
+                  </div>
+                  <div className="content_box_bottom_right">
                     <span
-                        className="ml_4 "
-                        style={file.owned ? ownedStyle : {}}
+                      className="ml_4 "
+                      style={file.owned ? ownedStyle : {}}
                     >
                       {file.owned ? "owner" : ""}
                     </span>
-                        </div>
-                      </div>
-                    </div>
-                ))}
-          </Row>
-          {resultList.length === 0 && (
-              <Table dataSource={resultList} pagination={false} />
-          )}
-        </div>
-        <div className="pagination">
-          <Pagination
-              page={pageIndex}
-              count={total ? Math.ceil(total / pageSize) : 1}
-              onChange={pageChange}
-          />
-        </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+        </Row>
+        {resultList.length === 0 && (
+          <Table dataSource={resultList} pagination={false} />
+        )}
       </div>
+      <div className="pagination">
+        <Pagination
+          page={pageIndex}
+          count={total ? Math.ceil(total / pageSize) : 1}
+          onChange={pageChange}
+        />
+      </div>
+    </div>
   );
 };
