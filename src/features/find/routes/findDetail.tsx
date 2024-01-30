@@ -88,7 +88,7 @@ export const FindDetail = () => {
         detailItem.creator_address,
         detailItem.file_url,
         detailItem.file_hash,
-        detailItem.file_zk_poof,
+        detailItem.file_zk_proof,
         values.usageDays,
         async () => {
       window.location.reload();
@@ -175,10 +175,10 @@ export const FindDetail = () => {
         detailItem.file_name,
         detailItem.file_hash,
         detailItem.creator_address,
-        detailItem.file_zk_poof,
+        detailItem.file_zk_proof,
         detailItem.file_url,
         detailItem.file_encrypted_size,
-      fileDownloadCallBack,
+        fileDownloadCallBack
     );
   };
 

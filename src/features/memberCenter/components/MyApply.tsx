@@ -126,7 +126,7 @@ export const MyApply = () => {
         record.file_name,
         record.file_hash,
         record.file_owner_address,
-        record.file_zk_poof,
+        record.file_zk_proof,
         record.file_url,
         record.file_encrypted_size,
         fileDownloadCallBack);
