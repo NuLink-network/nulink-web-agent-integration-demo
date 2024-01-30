@@ -83,15 +83,14 @@ export const FindDetail = () => {
    * @param values {usageDays: number}
    */
   const applyForFile = async (values) => {
-    const applyInfo: ApplyInfo = {
-      fileCreatorAddress: detailItem.creator_address,
-      fileId: detailItem.file_id,
-      fileName: detailItem.file_name,
-      fileUrl: detailItem.file_url,
-      zkProof: detailItem.file_zk_poof,
-      usageDays: values.usageDays,
-    };
-    await apply(applyInfo, async () => {
+    await apply(detailItem.file_name,
+        detailItem.file_id,
+        detailItem.creator_address,
+        detailItem.file_url,
+        detailItem.file_hash,
+        detailItem.file_zk_poof,
+        values.usageDays,
+        async () => {
       window.location.reload();
     });
   };
