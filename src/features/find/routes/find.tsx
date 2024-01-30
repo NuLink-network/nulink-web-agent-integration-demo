@@ -320,7 +320,7 @@ export const Find = () => {
         </div>
 
         <OvalButton
-          title={t<string>("header-a-tab-2-1")}
+          title={'Upload via Agent'}
           onClick={uploadArrayBuffer}
         />
       </div>
