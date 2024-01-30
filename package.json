@@ -8,6 +8,7 @@
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
     "@hcaptcha/react-hcaptcha": "^1.4.4",
+    "@mui/icons-material": "^5.15.6",
     "@mui/material": "^5.10.7",
     "@nulink_network/nulink-web-agent-access-sdk": "^0.5.5",
     "@testing-library/jest-dom": "^5.14.1",

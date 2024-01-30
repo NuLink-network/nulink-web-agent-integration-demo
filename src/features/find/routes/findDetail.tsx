@@ -133,6 +133,7 @@ export const FindDetail = () => {
         Object.assign({}, result, {
           owner: result.creator || passedFile.owner,
           src: passedFile.src,
+          useThumbnailBase64: passedFile.useThumbnailBase64
         }),
       );
 
@@ -285,12 +286,6 @@ export const FindDetail = () => {
   };
 
   const fileImgAreaStyle = {
-    width: "100%",
-    height: "100%",
-    display: "inline-block",
-  };
-
-  const fileImgAreaOriStyle = {
     width: "75px",
     height: "fit-content",
     display: "inline-block",
@@ -307,10 +302,10 @@ export const FindDetail = () => {
       <Row className="find_detail_top">
         <Col span="12">
           <div className="find_detail_top_left">
-            {!detailItem.thumbnail ? (
+            {!detailItem.useThumbnailBase64 ? (
               <div className="file_img_area">
                 <img
-                  style={detailItem.src?fileImgAreaStyle:fileImgAreaOriStyle}
+                  style={fileImgAreaStyle}
                   src={detailItem.src || defaultImage}
                   alt=""
                 />
