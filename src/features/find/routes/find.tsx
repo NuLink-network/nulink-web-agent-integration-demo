@@ -121,11 +121,19 @@ export const Find = () => {
         }
 
         if (checkImgType(item.file_name)){
-          const response = await axios.get(DEMO_DAPP_BACKEND_URL + '/fileThumbnail/findThumbnailByHash/' + item.file_hash)
-          const cid = response.data.data
-          if (!!cid){
-            item.src = await getThumbnailBase64(cid);
-            item.useThumbnailBase64 = true;
+          if (item.file_hash){
+            const response = await axios.get(DEMO_DAPP_BACKEND_URL + '/fileThumbnail/findThumbnailByHash/' + item.file_hash)
+            const cid = response.data.data
+            if (!!cid){
+              item.src = await getThumbnailBase64(cid);
+              item.useThumbnailBase64 = true;
+            } else {
+              item.src = locale.messages.suffixs[item.suffix]
+                  ? require(`../../../assets/img/${
+                      locale.messages.suffixs[item.suffix]
+                  }.png`)
+                  : null;
+            }
           } else {
             item.src = locale.messages.suffixs[item.suffix]
                 ? require(`../../../assets/img/${

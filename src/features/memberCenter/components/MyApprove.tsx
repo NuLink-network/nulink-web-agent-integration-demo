@@ -204,11 +204,10 @@ export const MyApprove = () => {
         ursulaThreshold,
         async (data) => {
           if (data.result == "success"){
-            alert("Approve Success!");
+            window.location.reload();
           } else {
             alert("Approve Failed!");
           }
-          window.location.reload();
         })
   }
  /* const batchApproveSubmit = async () => {
