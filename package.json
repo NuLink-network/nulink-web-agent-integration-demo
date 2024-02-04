@@ -1,6 +1,6 @@
 {
   "name": "nulink-web",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "private": true,
   "dependencies": {
     "@bnb-chain/greenfield-chain-sdk": "^0.2.2",
@@ -10,7 +10,7 @@
     "@hcaptcha/react-hcaptcha": "^1.4.4",
     "@mui/icons-material": "^5.15.6",
     "@mui/material": "^5.10.7",
-    "@nulink_network/nulink-web-agent-access-sdk": "^0.5.5",
+    "@nulink_network/nulink-web-agent-access-sdk": "^0.5.6",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^12.0.0",
     "@testing-library/user-event": "^13.2.1",
