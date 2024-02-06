@@ -19,7 +19,7 @@ import utc from "dayjs/plugin/utc";
 import { AlertColor } from "@mui/material";
 import { useState, useEffect } from "react";
 import OvalButton from "@/components/Button/OvalButton";
-import {locale, STAKING_SERVICE_URL, PORTER_URI} from "@/config";
+import {locale} from "@/config";
 import { toDisplayAddress } from "@/utils/format";
 import { type UseWalletPayRequestOptions } from "@/features/auth/api/useWalletPay";
 import { UsePopup } from "@/components/Popup";
