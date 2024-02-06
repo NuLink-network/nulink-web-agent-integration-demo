@@ -339,10 +339,10 @@ export const MyApprove = () => {
           dataSource={approvalList}
           pagination={false}
           rowKey={(record) => record.apply_id}
-          rowSelection={{
-            type: "checkbox",
-            ...rowSelection,
-          }}
+          // rowSelection={{
+          //   type: "checkbox",
+          //   ...rowSelection,
+          // }}
           locale={{
             emptyText: (
               <div style={{ color: "var(--ui-color-neutral-black-900)" }}>
