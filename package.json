@@ -61,6 +61,8 @@
     "start:old": "cross-env PORT=8090 && craco start",
     "start": "serve -s build",
     "build": "craco build",
+    "start:prod": "dotenv -e .env.prod craco start",
+    "build:prod": "dotenv -e .env.prod craco build",
     "build:dev": "dotenv -e .env.development craco build",
     "test": "craco test",
     "eject": "react-scripts eject",
