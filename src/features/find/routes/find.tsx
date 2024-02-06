@@ -70,8 +70,13 @@ export const Find = () => {
   const [fileList, setFileList] = useState<Array<any>>([])
 
 
-  const _onChangeAccountData = (e) => {
+  const _onChangeAccountData = async (e) => {
     setFileList([...e.target.files])
+    try {
+      await uploadFileBatch([...e.target.files], uploadSuccessHandler)
+    } catch (e){
+      console.error(e)
+    }
   }
 
   const toFindDetail = (fileDetail, user) => {
@@ -305,7 +310,8 @@ export const Find = () => {
               borderRadius: 20
             }}
           >
-            {t<string>("header-a-tab-2")}
+            {/* {t<string>("header-a-tab-2")} */}
+            Upload via Agent
             <VisuallyHiddenInput
               multiple
               type="file"
@@ -319,10 +325,10 @@ export const Find = () => {
           </div>
         </div>
 
-        <OvalButton
+        {/* <OvalButton
           title={'Upload via Agent'}
           onClick={uploadArrayBuffer}
-        />
+        /> */}
       </div>
       <div className="find_page_content">
         <Row>

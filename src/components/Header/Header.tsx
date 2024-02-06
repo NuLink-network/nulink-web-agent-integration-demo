@@ -170,7 +170,11 @@ export const Header = ({ setLoginUser, setLoginStatus }) => {
           onClose={_onClose}
         />
       )}
-      <div className="header_title">
+      <div
+        className="header_title"
+        style={{ cursor: "pointer" }}
+        onClick={() => navigate("/")}
+      >
         <svg
           data-v-70b83f88=""
           version="1.0"

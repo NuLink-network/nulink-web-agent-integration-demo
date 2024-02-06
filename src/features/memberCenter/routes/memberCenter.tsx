@@ -65,17 +65,17 @@ export const MemberCenter = () => {
     setOpen(false);
   };
 
-  const sendTransaction = async () => {
-    await sendCustomTransaction(sendTransactionCallBack, '0xeEFA1EADDEea7a3d9acf04D421bDb26a4725Faed', null, '10000000000000000')
-  }
+  // const sendTransaction = async () => {
+  //   await sendCustomTransaction(sendTransactionCallBack, '0xeEFA1EADDEea7a3d9acf04D421bDb26a4725Faed', null, '10000000000000000')
+  // }
 
-  const sendTransactionCallBack = async (data) => {
-    try {
-      console.log(data)
-    } catch (error) {
-      throw new Error("Decryption failed, Please try again");
-    }
-  };
+  // const sendTransactionCallBack = async (data) => {
+  //   try {
+  //     console.log(data)
+  //   } catch (error) {
+  //     throw new Error("Decryption failed, Please try again");
+  //   }
+  // };
 
   const editTitle = () => {
     return (
@@ -135,11 +135,11 @@ export const MemberCenter = () => {
                 navigate("/modifyData");
               }}
             />
-            <OvalButton
+            {/* <OvalButton
                 title={sendTitle()}
                 style={{ marginLeft: "10px" }}
                 onClick={sendTransaction}
-            />
+            /> */}
           </div>
         </div>
         <div className="member_center_tab">
