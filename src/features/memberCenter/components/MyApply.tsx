@@ -1,5 +1,5 @@
 import { Select, Table, Tooltip, Modal } from "antd";
-import {AlertColor, Pagination} from "@mui/material";
+import { AlertColor, Pagination } from "@mui/material";
 import { t } from "i18next";
 import "../assets/myApply.less";
 import dayjs from "dayjs";
@@ -12,7 +12,10 @@ import storage from "@/utils/storage";
 import { cache_user_key } from "@/features/auth/api/getLoginedUserInfo";
 import { decrypt } from "@/utils/crypto";
 import { getData } from "@/utils/ipfs";
-import { download as fileDownload, getSendApplyFiles } from "@nulink_network/nulink-web-agent-access-sdk";
+import {
+  download as fileDownload,
+  getSendApplyFiles,
+} from "@nulink_network/nulink-web-agent-access-sdk";
 import Alert from "@/components/Layout/Alert";
 dayjs.extend(utc);
 
@@ -116,20 +119,24 @@ export const MyApply = () => {
 
   const download = async (record) => {
     const currentDate: Date = new Date();
-    const currentTimestampInSeconds: number = Math.floor(currentDate.getTime() / 1000);
-    if(currentTimestampInSeconds > record.end_at){
-      showMsg("The file has expired. Please reapply.")
-      return
+    const currentTimestampInSeconds: number = Math.floor(
+      currentDate.getTime() / 1000,
+    );
+    if (currentTimestampInSeconds > record.end_at) {
+      showMsg("The file has expired. Please reapply.");
+      return;
     }
     record.proposer_address = currentRecord.proposer_address;
-    await fileDownload(record.file_id,
-        record.file_name,
-        record.file_hash,
-        record.file_owner_address,
-        record.file_zk_proof,
-        record.file_url,
-        record.file_encrypted_size,
-        fileDownloadCallBack);
+    await fileDownload(
+      record.file_id,
+      record.file_name,
+      record.file_hash,
+      record.file_owner_address,
+      record.file_zk_proof,
+      record.file_url,
+      record.file_encrypted_size,
+      fileDownloadCallBack,
+    );
   };
 
   const stringToArrayBuffer = (str: string): ArrayBuffer => {
@@ -139,25 +146,25 @@ export const MyApply = () => {
       uintArray[i] = str.charCodeAt(i);
     }
     return buffer;
-  }
+  };
 
   const fileDownloadCallBack = async (data) => {
     try {
       if (!!data && data.arrayBuffer) {
-        const blob = new Blob([data.arrayBuffer], { type: 'arraybuffer' })
-        const url = window.URL.createObjectURL(blob)
+        const blob = new Blob([data.arrayBuffer], { type: "arraybuffer" });
+        const url = window.URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.style.display = "none";
-        link.href = url
+        link.href = url;
         link.setAttribute("download", data.fileName);
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
       }
-    }catch (error){
-      throw new Error("Decryption failed, Please try again")
+    } catch (error) {
+      throw new Error("Decryption failed, Please try again");
     }
-  }
+  };
 
   const authorizationSuccessHandler = async (e) => {
     const responseData = JSON.parse(e.data);
@@ -201,7 +208,7 @@ export const MyApply = () => {
     const user = storage.getItem(cache_user_key);
     setStatus(value);
     setPageIndex(1);
-    const result = (await getSendApplyFiles(user?.accountId, 0, 1, 10));
+    const result = await getSendApplyFiles(user?.accountId, 0, 1, 10);
     setApplyList(result?.list || []);
     setTotal(result?.total || 0);
   };
@@ -209,17 +216,17 @@ export const MyApply = () => {
     setPageIndex(val);
     const user = storage.getItem(cache_user_key);
 
-    const result = (await getSendApplyFiles(user?.accountId, 0, val, 10));
+    const result = await getSendApplyFiles(user?.accountId, 0, val, 10);
     setApplyList(result?.list || []);
     setTotal(result?.total || 0);
   };
   return (
     <div className="my_apply">
       <Alert
-          open={open}
-          severity={severity}
-          onClose={handleClose}
-          message={alertMessage}
+        open={open}
+        severity={severity}
+        onClose={handleClose}
+        message={alertMessage}
       />
       <div className="my_apply_select">
         <Select style={selectStyle} onChange={statusSelectHandler}>
@@ -239,6 +246,13 @@ export const MyApply = () => {
           dataSource={applyList}
           pagination={false}
           scroll={{ x: 1500 }}
+          locale={{
+            emptyText: (
+              <div style={{ color: "var(--ui-color-neutral-black-900)" }}>
+                No Data
+              </div>
+            ),
+          }}
         />
       </div>
       <div className="pagination">

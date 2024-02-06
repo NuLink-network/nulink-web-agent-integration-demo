@@ -299,6 +299,7 @@ export const Find = () => {
           style={{
             display: "flex",
             alignItems: "center",
+            color: 'var(--ui-color-neutral-black-900)'
           }}
         >
           <MuiButton

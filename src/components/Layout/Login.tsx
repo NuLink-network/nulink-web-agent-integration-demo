@@ -12,7 +12,7 @@ export const Login = ({ loginStatus }) => {
       ) : loginStatus === 1 ? (
         <div className="connect">
           <img src={LoginIcon} alt="" />
-          <p className="tip">Click Agent button to connect nulink agent</p>
+          <p className="tip">Click the 'Agent' button to connect to the NuLink Agent.</p>
           {/* <p>Agent has not been installed yet?</p>
           <OvalButton
             title="Download agent"
@@ -27,7 +27,7 @@ export const Login = ({ loginStatus }) => {
             Please refer to{" "}
             <a
               className="help-center"
-              href="https://docs.nulink.org/products/file_sharing_dapp"
+              href="https://docs.nulink.org/products/dapp_users/agent_usecase"
               target="_blank"
             >
               Help Center

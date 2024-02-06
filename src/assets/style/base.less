@@ -155,8 +155,18 @@ p {
 
         .ant-table-tbody {
 
+          tr{
+            &:hover{
+              td{
+                color: var(--ui-color-indigo-indigo-700);
+                background: var(--ui-color-neutral-black-900);
+              }
+            }
+          }
+
           >tr>td {
             border: none;
+            color: var(--ui-color-neutral-black-900);
           }
         }
       }

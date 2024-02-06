@@ -343,6 +343,13 @@ export const MyApprove = () => {
             type: "checkbox",
             ...rowSelection,
           }}
+          locale={{
+            emptyText: (
+              <div style={{ color: "var(--ui-color-neutral-black-900)" }}>
+                No Data
+              </div>
+            ),
+          }}
           scroll={{ x: 1500 }}
         />
       </div>
