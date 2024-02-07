@@ -152,6 +152,23 @@
     Table {
       min-height: calc(100vh - 454px);
     }
+
+    >.ant-table-wrapper{
+      tr{
+        td{
+          background: var(--ui-color-indigo-indigo-100) !important;
+
+          .ant-empty-description{
+            color: var(--ui-color-neutral-black-900);
+          }
+        }
+        &:hover{
+          td{
+            background: transparent;
+          }
+        }
+      }
+    }
   }
 
   &_bottom {

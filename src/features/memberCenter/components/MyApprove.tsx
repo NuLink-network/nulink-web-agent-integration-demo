@@ -439,7 +439,7 @@ export const MyApprove = () => {
             await approveSubmit();
           }}
         >
-          <Form.Item
+          {/* <Form.Item
             className="label-half"
             label={t<string>("member-center-approve-modal-label-1")}
             name="selector"
@@ -450,7 +450,7 @@ export const MyApprove = () => {
                 <Radio value={option.value}>{option.label}</Radio>
               ))}
             </Radio.Group>
-          </Form.Item>
+          </Form.Item> */}
 
           <Form.Item
             className="label-half"
@@ -608,7 +608,7 @@ export const MyApprove = () => {
             /*await batchApproveSubmit();*/
           }}
         >
-          <Form.Item
+          {/* <Form.Item
             className="label-half"
             label={t<string>("member-center-approve-modal-label-1")}
             name="selector"
@@ -619,7 +619,7 @@ export const MyApprove = () => {
                 <Radio value={option.value}>{option.label}</Radio>
               ))}
             </Radio.Group>
-          </Form.Item>
+          </Form.Item> */}
 
           <Form.Item
             className="label-half"
