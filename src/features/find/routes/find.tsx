@@ -210,7 +210,7 @@ export const Find = () => {
           dataList.push({dataHash : map.get(file.name), cid: cid})
         }*/
         await axios.post(DEMO_DAPP_BACKEND_URL + '/fileThumbnail/createBatch', dataList)
-        window.location.reload()
+        await search()
       }
     } catch (e) {
       console.log(e)
