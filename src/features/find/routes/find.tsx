@@ -73,7 +73,7 @@ export const Find = () => {
   const _onChangeAccountData = async (e) => {
     setFileList([...e.target.files])
     try {
-      await uploadFileBatch([...e.target.files], uploadSuccessHandler)
+      await uploadFileBatch([...e.target.files], uploadSuccessHandler.bind(this, [...e.target.files]))
     } catch (e){
       console.error(e)
     }
@@ -189,7 +189,7 @@ export const Find = () => {
     })();
   }, [navigate]);
 
-  const uploadSuccessHandler = async (responseData) => {
+  const uploadSuccessHandler = async (_fileList,responseData) => {
     try {
       if(responseData.dataInfo){
         let map:Map<string,number> = new Map();
@@ -197,7 +197,7 @@ export const Find = () => {
           map.set(data.dataLabel, data.dataHash)
         })
         let dataList:any = []
-        const uploadData = await convertFileToUploadData(fileList)
+        const uploadData = await convertFileToUploadData(_fileList)
         for (const data of uploadData) {
           if (checkImgType(data.name)){
             const cid = await setIPFSBlurThumbnail(data.fileBinaryArrayBuffer, data.name)
