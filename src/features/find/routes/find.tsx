@@ -1,38 +1,68 @@
 import "../assets/index.less";
-import {Row, Form, Table, Button} from "antd";
+import { Row, Form, Table, Input, Button, Select } from "antd";
 import { useNavigate } from "react-router-dom";
 import { defaultImage, defaultAvatarImage } from "@/utils/defaultImage";
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import { locale } from "@/config";
+import { SearchOutlined } from "@ant-design/icons";
 import { type FileListRequestOptions } from "../api/find";
-import {checkImgType, generateBlurThumbnail, getThumbnailBase64, setIPFSBlurThumbnail} from "@/utils/image";
+import CloseButton from "@/components/Button/CloseButton";
+import DataIndicators from "../components/DataIndicators";
+import {
+  checkImgType,
+  generateBlurThumbnail,
+  getThumbnailBase64,
+  setIPFSBlurThumbnail,
+} from "@/utils/image";
 import {
   getAvatarBase64String,
   getUserCache,
 } from "@/features/auth/api/getLoginedUserInfo";
 import OvalButton from "@/components/Button/OvalButton";
 import { Pagination } from "@mui/material";
-import { upload, getFileList, uploadFileBatch } from "@nulink_network/nulink-web-agent-access-sdk";
+import {
+  upload,
+  getFileList,
+  uploadFileBatch,
+} from "@nulink_network/nulink-web-agent-access-sdk";
 import storage from "@/utils/storage";
 import axios from "axios";
 import { DEMO_DAPP_BACKEND_URL } from "@/config";
 import { setData as setIPFSData } from "@/utils/ipfs";
-import { styled } from '@mui/material/styles';
-import MuiButton from '@mui/material/Button';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import { styled } from "@mui/material/styles";
+import MuiButton from "@mui/material/Button";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 
-const VisuallyHiddenInput = styled('input')({
-  clip: 'rect(0 0 0 0)',
-  clipPath: 'inset(50%)',
+const { Option } = Select;
+
+const VisuallyHiddenInput = styled("input")({
+  clip: "rect(0 0 0 0)",
+  clipPath: "inset(50%)",
   height: 1,
-  overflow: 'hidden',
-  position: 'absolute',
+  overflow: "hidden",
+  position: "absolute",
   bottom: 0,
   left: 0,
-  whiteSpace: 'nowrap',
+  whiteSpace: "nowrap",
   width: 1,
 });
+
+const inputStyle = {
+  width: "300px",
+  height: "40px",
+  borderRadius: "20px",
+  border: "none",
+  paddingRight: "60px",
+};
+
+const formItemStyle = {
+  marginRight: "20px",
+};
+
+const selectStyle = {
+  width: "200px",
+};
 
 const fileImgAreaStyle = {
   width: "75px",
@@ -48,15 +78,16 @@ export const ownedStyle = {
   background: "ghostwhite",
 };
 export type uploadData = {
-  dataLabel : string,
-  fileBinaryArrayBuffer: Blob
-}
+  dataLabel: string;
+  fileBinaryArrayBuffer: Blob;
+};
 
 export const Find = () => {
   const pageSize = 12;
   const [pageIndex, setPageIndex] = useState(1);
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const [form] = Form.useForm();
   const [searchValues, setSearchValues] = useState({});
   const [user, setUser] = useState<any>(null);
   const [resultList, setResultList] = useState<any>([]);
@@ -65,19 +96,21 @@ export const Find = () => {
   const [fileType, setFileType] = useState<any>(undefined);
 
   const [fileName] = useState<string>("");
-  const [descOrder] = useState<boolean>(true);
+  const [descOrder, setDescOrder] = useState<boolean>(true);
 
-  const [fileList, setFileList] = useState<Array<any>>([])
-
+  const [fileList, setFileList] = useState<Array<any>>([]);
 
   const _onChangeAccountData = async (e) => {
-    setFileList([...e.target.files])
+    setFileList([...e.target.files]);
     try {
-      await uploadFileBatch([...e.target.files], uploadSuccessHandler.bind(this, [...e.target.files]))
-    } catch (e){
-      console.error(e)
+      await uploadFileBatch(
+        [...e.target.files],
+        uploadSuccessHandler.bind(this, [...e.target.files]),
+      );
+    } catch (e) {
+      console.error(e);
     }
-  }
+  };
 
   const toFindDetail = (fileDetail, user) => {
     navigate("/findDetail", { state: { file: fileDetail, user: user } });
@@ -100,6 +133,20 @@ export const Find = () => {
     setPageIndex(1);
     setSearchValues(values);
     let result = await getFileList(user.accountId, true, true, 1, pageSize);
+    // let result = await getFileList(
+    //   user.accountId,
+    //   true,
+    //   true,
+    //   1,
+    //   pageSize,
+    //   // {
+    //   // ...values,
+    //   // pageSize,
+    //   // pageIndex: 1,
+    //   // include: true,
+    //   // }
+    // );
+
     dealWithResultList(result);
   };
 
@@ -113,8 +160,69 @@ export const Find = () => {
     }, []);
   };
 
-  const dealWithResultList = (result) => {
+  const handleTypeChange = (type, e) => {
+    const obj = {
+      add: async () => {
+        setFileCategory(e);
+        await search({
+          fileName,
+          fileCategory: e,
+          fileType,
+          descOrder,
+          pageIndex: 1,
+          pageSize,
+        });
+      },
+      remove: async () => {
+        form.setFieldsValue({ fileCategory: [] });
+        setFileCategory([]);
+        await search({
+          fileName,
+          fileCategory: "",
+          fileType,
+          descOrder,
+          pageIndex: 1,
+          pageSize,
+        });
+      },
+    };
+    obj[type]();
+  };
 
+  const handleLastChange = (e) => {
+    setDescOrder(e);
+  };
+
+  const handleFormatChange = (type, e) => {
+    const obj = {
+      add: async () => {
+        setFileType(e);
+        await search({
+          fileName,
+          fileCategory,
+          fileType: e,
+          descOrder,
+          pageIndex,
+          pageSize,
+        });
+      },
+      remove: async () => {
+        form.setFieldsValue({ fileType: undefined });
+        setFileType(undefined);
+        await search({
+          fileName,
+          fileCategory,
+          fileType: undefined,
+          descOrder,
+          pageIndex,
+          pageSize,
+        });
+      },
+    };
+    obj[type]();
+  };
+
+  const dealWithResultList = (result) => {
     setResultList([]);
     if (result.list.length > 0) {
       result.list.forEach(async (item) => {
@@ -125,33 +233,37 @@ export const Find = () => {
           }
         }
 
-        if (checkImgType(item.file_name)){
-          if (item.file_hash){
-            const response = await axios.get(DEMO_DAPP_BACKEND_URL + '/fileThumbnail/findThumbnailByHash/' + item.file_hash)
-            const cid = response.data.data
-            if (!!cid){
+        if (checkImgType(item.file_name)) {
+          if (item.file_hash) {
+            const response = await axios.get(
+              DEMO_DAPP_BACKEND_URL +
+                "/fileThumbnail/findThumbnailByHash/" +
+                item.file_hash,
+            );
+            const cid = response.data.data;
+            if (!!cid) {
               item.src = await getThumbnailBase64(cid);
               item.useThumbnailBase64 = true;
             } else {
               item.src = locale.messages.suffixs[item.suffix]
-                  ? require(`../../../assets/img/${
-                      locale.messages.suffixs[item.suffix]
+                ? require(`../../../assets/img/${
+                    locale.messages.suffixs[item.suffix]
                   }.png`)
-                  : null;
+                : null;
             }
           } else {
             item.src = locale.messages.suffixs[item.suffix]
-                ? require(`../../../assets/img/${
-                    locale.messages.suffixs[item.suffix]
+              ? require(`../../../assets/img/${
+                  locale.messages.suffixs[item.suffix]
                 }.png`)
-                : null;
+              : null;
           }
         } else {
           item.src = locale.messages.suffixs[item.suffix]
-              ? require(`../../../assets/img/${
-                  locale.messages.suffixs[item.suffix]
+            ? require(`../../../assets/img/${
+                locale.messages.suffixs[item.suffix]
               }.png`)
-              : null;
+            : null;
         }
 
         /*if (!!item.thumbnail) {
@@ -189,19 +301,24 @@ export const Find = () => {
     })();
   }, [navigate]);
 
-  const uploadSuccessHandler = async (_fileList,responseData) => {
+  const uploadSuccessHandler = async (_fileList, responseData) => {
     try {
-      if(responseData.dataInfo){
-        let map:Map<string,number> = new Map();
-        responseData.dataInfo.map((data: { dataLabel: string; dataHash: number; }) => {
-          map.set(data.dataLabel, data.dataHash)
-        })
-        let dataList:any = []
-        const uploadData = await convertFileToUploadData(_fileList)
+      if (responseData.dataInfo) {
+        let map: Map<string, number> = new Map();
+        responseData.dataInfo.map(
+          (data: { dataLabel: string; dataHash: number }) => {
+            map.set(data.dataLabel, data.dataHash);
+          },
+        );
+        let dataList: any = [];
+        const uploadData = await convertFileToUploadData(_fileList);
         for (const data of uploadData) {
-          if (checkImgType(data.name)){
-            const cid = await setIPFSBlurThumbnail(data.fileBinaryArrayBuffer, data.name)
-            dataList.push({dataHash : map.get(data.name), cid: cid})
+          if (checkImgType(data.name)) {
+            const cid = await setIPFSBlurThumbnail(
+              data.fileBinaryArrayBuffer,
+              data.name,
+            );
+            dataList.push({ dataHash: map.get(data.name), cid: cid });
           }
         }
         /*for (let file of fileList) {
@@ -209,40 +326,45 @@ export const Find = () => {
           const cid = await setIPFSData(buffer)
           dataList.push({dataHash : map.get(file.name), cid: cid})
         }*/
-        await axios.post(DEMO_DAPP_BACKEND_URL + '/fileThumbnail/createBatch', dataList)
-        await search()
+        await axios.post(
+          DEMO_DAPP_BACKEND_URL + "/fileThumbnail/createBatch",
+          dataList,
+        );
+        await search();
       }
     } catch (e) {
-      console.log(e)
-    }
-  }
-
-  const arrayBufferToString = (arrayBuffer:ArrayBuffer) => {
-    const decoder = new TextDecoder('utf-8');
-    const uint8Array = new Uint8Array(arrayBuffer);
-    const string = decoder.decode(uint8Array);
-    return string;
-  }
-
-  const uploadArrayBuffer = async () => {
-    try {
-      await uploadFileBatch(fileList, uploadSuccessHandler)
-    } catch (e){
-      console.error(e)
+      console.log(e);
     }
   };
 
-  const convertFileToUploadData = async (files : File[]) => {
-    const upFiles: any = []
+  const arrayBufferToString = (arrayBuffer: ArrayBuffer) => {
+    const decoder = new TextDecoder("utf-8");
+    const uint8Array = new Uint8Array(arrayBuffer);
+    const string = decoder.decode(uint8Array);
+    return string;
+  };
+
+  const uploadArrayBuffer = async () => {
+    try {
+      await uploadFileBatch(fileList, uploadSuccessHandler);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const convertFileToUploadData = async (files: File[]) => {
+    const upFiles: any = [];
     for (const file of files) {
-      const fileBinaryArrayBuffer: ArrayBuffer = await blobToArrayBuffer(file) as ArrayBuffer
-      upFiles.push({ name: file.name, fileBinaryArrayBuffer })
+      const fileBinaryArrayBuffer: ArrayBuffer = (await blobToArrayBuffer(
+        file,
+      )) as ArrayBuffer;
+      upFiles.push({ name: file.name, fileBinaryArrayBuffer });
     }
     upFiles.forEach((x) => {
-      x.fileBinaryArrayBuffer = Buffer.from(x.fileBinaryArrayBuffer).buffer
-    })
-    return upFiles
-  }
+      x.fileBinaryArrayBuffer = Buffer.from(x.fileBinaryArrayBuffer).buffer;
+    });
+    return upFiles;
+  };
 
   //* Convert resBlob to ArrayBuffer
   const blobToArrayBuffer = (blob: Blob) => {
@@ -251,10 +373,10 @@ export const Find = () => {
       reader.onloadend = (e: any) => {
         const fileBinaryArrayBuffer = new Uint8Array(e?.target?.result).buffer;
         resolve(fileBinaryArrayBuffer);
-      }
+      };
       reader.readAsArrayBuffer(blob);
     });
-  }
+  };
 
   const _filterQuery = (key, value) => {
     const keyObj = {
@@ -271,7 +393,7 @@ export const Find = () => {
       },
       fileType: async () => {
         const [data] = locale.fields.fileType.filter(
-            (x) => x.label.toLocaleLowerCase() === value.toLocaleLowerCase(),
+          (x) => x.label.toLocaleLowerCase() === value.toLocaleLowerCase(),
         );
         setFileType(data.value);
         await search({
@@ -289,17 +411,12 @@ export const Find = () => {
 
   return (
     <div className="find_page reactive">
-      <div className="find_page_search">
-        {/* <input
-              multiple
-              type="file"
-              onChange={_onChangeAccountData}
-          /> */}
+      {/* <div className="find_page_search">
         <div
           style={{
             display: "flex",
             alignItems: "center",
-            color: 'var(--ui-color-neutral-black-900)'
+            color: "var(--ui-color-neutral-black-900)",
           }}
         >
           <MuiButton
@@ -307,11 +424,10 @@ export const Find = () => {
             variant="contained"
             startIcon={<CloudUploadIcon />}
             style={{
-              background: '#ba9756',
-              borderRadius: 20
+              background: "#ba9756",
+              borderRadius: 20,
             }}
           >
-            {/* {t<string>("header-a-tab-2")} */}
             Upload via Agent
             <VisuallyHiddenInput
               multiple
@@ -325,11 +441,122 @@ export const Find = () => {
               : fileList[0]?.name}
           </div>
         </div>
-
-        {/* <OvalButton
-          title={'Upload via Agent'}
-          onClick={uploadArrayBuffer}
-        /> */}
+      </div> */}
+      <DataIndicators />
+      <div className="find_page_search">
+        <div style={{ display: "flex" }}>
+          <Input
+            prefix={
+              <SearchOutlined style={{ fontSize: "20px", color: "#7A7A7A" }} />
+            }
+            // onChange={handleInput}
+            style={{ ...inputStyle, ...formItemStyle }}
+            placeholder={t<string>("find-a-input-placeholder")}
+          />
+          {/* {fileCategory.length > 0 ? (
+            <CloseButton
+              title={
+                locale.fields.fileCategory.filter(
+                  (item) => fileCategory[0] === item.value,
+                )[0]?.label ?? fileCategory[0]
+              }
+              onClose={handleTypeChange.bind(this, "remove")}
+            />
+          ) : (
+            <Select
+              mode="tags"
+              style={{ ...selectStyle, ...formItemStyle }}
+              placeholder={t<string>("find-a-select-placeholder-1")}
+              onChange={handleTypeChange.bind(this, "add")}
+              disabled={fileCategory.length > 0}
+            >
+              {locale.fields.fileCategory.map((item, index) => (
+                <Option key={item.label} value={item.value}>
+                  {item.label}
+                </Option>
+              ))}
+            </Select>
+          )}
+          {fileType || Number(fileType) === 0 || fileType === "" ? (
+            <CloseButton
+              title={
+                locale.fields.fileType.filter(
+                  (item) => fileType === item.value,
+                )[0].label
+              }
+              onClose={handleFormatChange.bind(this, "remove")}
+            />
+          ) : (
+            <Select
+              style={{ ...selectStyle, ...formItemStyle }}
+              placeholder={t<string>("find-a-select-placeholder-2")}
+              onChange={handleFormatChange.bind(this, "add")}
+            >
+              {locale.fields.fileType.map((item, index) => {
+                return (
+                  <Option key={item.label} value={item.value}>
+                    {item.label}
+                  </Option>
+                );
+              })}
+            </Select>
+          )}
+          <Select
+            style={{ ...selectStyle, ...formItemStyle }}
+            placeholder={t<string>("find-a-select-placeholder-3")}
+            onChange={handleLastChange}
+          >
+            {locale.fields.descOrder.map((item, index) => {
+              return (
+                <Option key={item.label} value={item.value}>
+                  {item.label}
+                </Option>
+              );
+            })}
+          </Select> */}
+          <OvalButton
+            title={t<string>("find-a-search-btn")}
+            onClick={async () => {
+              await search({
+                fileName,
+                fileCategory,
+                fileType,
+                descOrder,
+                pageIndex,
+                pageSize,
+              });
+            }}
+          />
+        </div>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            color: "var(--ui-color-neutral-black-900)",
+          }}
+        >
+          <MuiButton
+            component="label"
+            variant="contained"
+            startIcon={<CloudUploadIcon />}
+            style={{
+              background: "#ba9756",
+              borderRadius: 20,
+            }}
+          >
+            Upload via Agent
+            <VisuallyHiddenInput
+              multiple
+              type="file"
+              onChange={_onChangeAccountData}
+            />
+          </MuiButton>
+          <div style={{ marginLeft: 10 }}>
+            {fileList.length > 1
+              ? `${fileList.length} ${t<string>("header-a-tab-2-2")}`
+              : fileList[0]?.name}
+          </div>
+        </div>
       </div>
       <div className="find_page_content">
         <Row>
