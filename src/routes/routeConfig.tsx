@@ -9,6 +9,7 @@ const { MemberCenter } = lazyImport(
   "MemberCenter",
 );
 const { ModifyData } = lazyImport(() => import('@/features/memberCenter'), "ModifyData");
+const { Creator } = lazyImport(() => import('@/features/memberCenter'), "Creator");
 
 export const routeConfig = [
   { path: "/", element: <Find /> },
@@ -16,4 +17,5 @@ export const routeConfig = [
   { path: "/findDetail", element: <FindDetail /> },
   { path: "/memberCenter", element: <MemberCenter /> },
   { path: "/modifyData", element: <ModifyData /> },
+  { path: "/creator/:accountID", element: <Creator /> }
 ];

@@ -95,7 +95,7 @@ export const Find = () => {
   const [fileCategory, setFileCategory] = useState<any>([]);
   const [fileType, setFileType] = useState<any>(undefined);
 
-  const [fileName] = useState<string>("");
+  const [fileName, setFileName] = useState<string>("");
   const [descOrder, setDescOrder] = useState<boolean>(true);
 
   const [fileList, setFileList] = useState<Array<any>>([]);
@@ -124,7 +124,6 @@ export const Find = () => {
     if (!user) {
       return;
     }
-    console.log("user: ", user);
 
     if (Array.isArray(values.fileCategory)) {
       values.fileCategory = values.fileCategory[0];
@@ -132,7 +131,16 @@ export const Find = () => {
 
     setPageIndex(1);
     setSearchValues(values);
-    let result = await getFileList(user.accountId, true, true, 1, pageSize);
+
+    let result = await getFileList(
+      user.accountId,
+      true,
+      fileName,
+      null,
+      true,
+      1,
+      pageSize,
+    );
     // let result = await getFileList(
     //   user.accountId,
     //   true,
@@ -291,7 +299,16 @@ export const Find = () => {
 
   const pageChange = async (e, val) => {
     setPageIndex(val);
-    let result = await getFileList(user.accountId, true, true, val, pageSize);
+    // let result = await getFileList(user.accountId, true, true, val, pageSize);
+    let result = await getFileList(
+      user.accountId,
+      true,
+      fileName,
+      null,
+      true,
+      val,
+      pageSize,
+    );
     dealWithResultList(result);
   };
 
@@ -378,6 +395,10 @@ export const Find = () => {
     });
   };
 
+  const handleInput = (e) => {
+    setFileName(e.target.value);
+  };
+
   const _filterQuery = (key, value) => {
     const keyObj = {
       fileCategory: async () => {
@@ -449,7 +470,7 @@ export const Find = () => {
             prefix={
               <SearchOutlined style={{ fontSize: "20px", color: "#7A7A7A" }} />
             }
-            // onChange={handleInput}
+            onChange={handleInput}
             style={{ ...inputStyle, ...formItemStyle }}
             placeholder={t<string>("find-a-input-placeholder")}
           />
@@ -610,7 +631,12 @@ export const Find = () => {
                   </div>
                 </div>
                 <div className="content_box_bottom">
-                  <div className="content_box_bottom_left">
+                  <div
+                    className="content_box_bottom_left"
+                    onClick={() => {
+                      navigate(`/creator/${file.owner_id}`);
+                    }}
+                  >
                     <img
                       src={file.owner_avatar || defaultAvatarImage}
                       alt="avatar"
