@@ -63,7 +63,7 @@ const DataIndicators = () => {
           </div>
           <span>{data?.file_total ?? "~"}</span>
         </li>
-        {/* <li>
+        <li>
           <div className="title-logo">
             <svg
               width="16"
@@ -80,7 +80,7 @@ const DataIndicators = () => {
             <span>File Sharing Count</span>
           </div>
           <span>{data?.file_share_total ?? "~"}</span>
-        </li> */}
+        </li>
       </ul>
     </div>
   );

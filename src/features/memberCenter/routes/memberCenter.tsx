@@ -15,10 +15,9 @@ import OvalButton from "../../../components/Button/OvalButton";
 import { useNavigate } from "react-router-dom";
 import { getUserInfo } from "../api/account";
 import { getAvatarBase64String } from "@/features/auth/api/getLoginedUserInfo";
-import {
-  sendCustomTransaction
-} from "@nulink_network/nulink-web-agent-access-sdk";
-import {getData} from "@/utils/ipfs";
+import { sendCustomTransaction } from "@nulink_network/nulink-web-agent-access-sdk";
+import { getData } from "@/utils/ipfs";
+import copy from "copy-to-clipboard";
 
 export const MemberCenter = () => {
   const navigate = useNavigate();
@@ -26,8 +25,8 @@ export const MemberCenter = () => {
   const [active, setActive] = useState("2");
   const [user, setUser] = useState<any>();
   const [open, setOpen] = useState<boolean>(false);
-  const [severity] = useState<AlertColor>("info");
-  const [alertMessage] = useState<string>("");
+  const [severity, setSeverity] = useState<AlertColor>("info");
+  const [alertMessage, setAlertMessage] = useState<string>("");
   const { t } = useTranslation();
   const ContentComponent = () => {
     switch (active) {
@@ -35,6 +34,22 @@ export const MemberCenter = () => {
         return <MyApply />;
       case "3":
         return <MyApprove />;
+    }
+  };
+
+  const showMsg = (message: string, severity: AlertColor = "error") => {
+    setOpen(true);
+    setSeverity(severity);
+    setAlertMessage(message);
+  };
+
+  const _copy = (val: string) => {
+    try {
+      copy(val);
+      showMsg("Copied", "success");
+    } catch (error) {
+      // nothing
+      showMsg("Copy fail");
     }
   };
 
@@ -93,15 +108,15 @@ export const MemberCenter = () => {
 
   const sendTitle = () => {
     return (
-        <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-            }}
-        >
-          <img src={editUrl} alt="" />
-          <span style={{ marginLeft: "10px" }}>Send</span>
-        </div>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <img src={editUrl} alt="" />
+        <span style={{ marginLeft: "10px" }}>Send</span>
+      </div>
     );
   };
 
@@ -140,6 +155,14 @@ export const MemberCenter = () => {
                 style={{ marginLeft: "10px" }}
                 onClick={sendTransaction}
             /> */}
+            <OvalButton
+              title={"Share It"}
+              style={{ marginLeft: "10px" }}
+              onClick={_copy.bind(
+                this,
+                `${window.location.origin}/creator/${user?.account_id}`,
+              )}
+            />
           </div>
         </div>
         <div className="member_center_tab">
