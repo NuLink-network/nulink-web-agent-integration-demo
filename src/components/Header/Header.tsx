@@ -20,9 +20,12 @@ import {
   getNetWorkChainId,
 } from "@nulink_network/nulink-web-agent-access-sdk";
 
-enum NETWORK_LIST {
-  Horus = "Horus",
-  Conflux = "Conflux Espace",
+export enum NETWORK_LIST {
+  Horus = "Horus", //testnet
+  HorusMainNet = "Horus MainNet",
+  ConfluxTestNet = "ConFlux Espace TestNet",
+  PolygonTestNet = "Polygon Mumbai", //polygon testnet
+  XChainTestNet = "OKX Chain TestNet",
 }
 
 const netWorkList: Array<any> = [
@@ -31,11 +34,16 @@ const netWorkList: Array<any> = [
     key: NETWORK_LIST.Horus,
     label: "Horus (BSC Testnet)",
   },
-  /*{
-    value: 71,
-    key: NETWORK_LIST.Conflux,
-    label: "Conflux eSpace Testnet",
-  },*/
+  {
+    value: 80001,
+    key: NETWORK_LIST.PolygonTestNet,
+    label: "Polygon Mumbai",
+  },
+  {
+    value: 195,
+    key: NETWORK_LIST.XChainTestNet,
+    label: "X1 TestNet",
+  },
 ];
 
 export const Header = ({ setLoginUser, setLoginStatus }) => {
@@ -66,13 +74,13 @@ export const Header = ({ setLoginUser, setLoginStatus }) => {
   const _changeNetwork = async () => {
     if (selectNetworkConfig && selectNetworkConfig.key) {
       setShowConfirmTipModal(false);
-      /*localStorage.setItem(
+      localStorage.setItem(
         "nulink_agent_react_chain_id",
         selectNetworkConfig.value,
       );
-      window.location.reload()*/
-      await setNetWorkChainId(selectNetworkConfig.value);
-      window.location.reload();
+      window.location.reload()
+      //await setNetWorkChainId(selectNetworkConfig.value);
+      //window.location.reload();
     }
   };
 
@@ -267,14 +275,14 @@ export const Header = ({ setLoginUser, setLoginStatus }) => {
         </svg>
       </div>
       <div className="header_tab">
-        {/* {chainID ? (
+        {chainID ? (
           <Select
             value={chainID}
             style={{ width: 240 }}
             options={netWorkList}
             onChange={_onOpenModal}
           />
-        ) : null} */}
+        ) : null }
         <div
           className={activityKey === "1" ? "activity" : ""}
           onClick={() => tabClick("1")}
