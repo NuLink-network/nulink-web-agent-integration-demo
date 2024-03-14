@@ -1,3 +1,25 @@
+.ant-select-dropdown{
+  background: var(--ui-color-indigo-indigo-100) !important;
+  
+
+  div{
+    color: var(--ui-color-neutral-black-900);
+
+    .rc-virtual-list{
+
+      .rc-virtual-list-holder-inner{
+        .ant-select-item-option-selected:not(.ant-select-item-option-disabled){
+          background-color:var(--ui-color-disabled-btn-text);
+        }
+
+        .ant-select-item-option-active:not(.ant-select-item-option-disabled){
+          background-color:var(--ui-color-disabled-btn-text);
+        }
+      }
+    }
+  }
+}
+
 .header {
   // background: #2b3a4b;
   width: 100%;
@@ -25,10 +47,12 @@
 
     .ant-select-selector {
       border: none !important;
-      background-color: #2b3a4b !important;
+      // background-color: #2b3a4b !important;
+      background: var(--ui-color-indigo-indigo-100) !important;
 
       .ant-select-selection-item{
-        color: #ffffff !important;
+        // color: #ffffff !important;
+        color: var(--ui-color-neutral-black-900);
       }
 
       &:hover{
