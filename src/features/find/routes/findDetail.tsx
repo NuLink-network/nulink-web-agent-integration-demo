@@ -1,10 +1,5 @@
 import { Row, Col, Modal, Form, Button, Select } from "antd";
-import {
-  ClockCircleFilled,
-  CheckCircleFilled,
-  CloseCircleFilled,
-  ExclamationCircleFilled,
-} from "@ant-design/icons";
+
 import "../assets/index.less";
 import {
   defaultImageHandler,
@@ -35,6 +30,7 @@ import {
 import { getData } from "@/utils/ipfs";
 import Alert from "@/components/Layout/Alert";
 import { AlertColor } from "@mui/material";
+import {CheckCircleFilled, ClockCircleFilled, CloseCircleFilled, ExclamationCircleFilled} from "@ant-design/icons";
 
 const btnStyle = {
   width: "150px",
@@ -115,45 +111,49 @@ export const FindDetail = () => {
       passedFile = location.state as any;
     }
 
-    (async (user) => {
+    await (async (user) => {
       const result = await getFileDetail(passedFile.file_id, user.accountId);
-
-      if (!!result.creator_avatar) {
-        const avatarStr = await getAvatarBase64String(result.creator_avatar);
+      debugger
+      if (result.code != 2000) {
+        showMsg(result.msg)
+        return
+      }
+      if (!!result.data.creator_avatar) {
+        const avatarStr = await getAvatarBase64String(result.data.creator_avatar);
         if (!!avatarStr) {
-          result.creator_avatar = avatarStr;
+          result.data.creator_avatar = avatarStr;
         } else {
-          result.creator_avatar = defaultAvatarImage;
+          result.data.creator_avatar = defaultAvatarImage;
         }
       } else {
-        result.creator_avatar = defaultAvatarImage;
+        result.data.creator_avatar = defaultAvatarImage;
       }
 
       setDetailItem(
-        Object.assign({}, result, {
-          owner: result.creator || passedFile.owner,
-          src: passedFile.src,
-          useThumbnailBase64: passedFile.useThumbnailBase64
-        }),
+          Object.assign({}, result.data, {
+            owner: result.data.creator || passedFile.owner,
+            src: passedFile.src,
+            useThumbnailBase64: passedFile.useThumbnailBase64
+          }),
       );
 
-      const isUploader = result.creator_id === user.accountId;
+      const isUploader = result.data.creator_id === user.accountId;
       setIsUploader(isUploader);
 
       /**
        * Is not to apply for, if result.status === 0
        * Application status: 0: unapplied, 1: Applied, 2: approved, 3: rejected
        */
-      setApplyStatus(result.status);
+      setApplyStatus(result.data.status);
 
-      if (result.status === 0 && !isUploader) {
+      if (result.data.status === 0 && !isUploader) {
         setButtonShow(true);
       }
 
       // get approved file list as account used
       const approveParams: FilesForApprovedAsUserRequestOptions = {};
       const approved = await getFilesForApprovedAsUser(approveParams);
-      if (approved?.list){
+      if (approved?.list) {
         await setApprovedFileList(approved.list);
       }
     })(user);
@@ -210,7 +210,6 @@ export const FindDetail = () => {
         return (
           <div className="find_detail_apply_status">
             <ClockCircleFilled
-              name="dateTime"
               style={{ color: "#68BB8D", marginRight: "10px" }}
             />
             {t<string>("find-detail-a-status-1")}

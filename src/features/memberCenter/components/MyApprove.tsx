@@ -261,9 +261,8 @@ export const MyApprove = () => {
 
     // const approvalList = (await getIncomingApplyFiles(user?.accountId, 0, 1, 10))
     const approvalList = await getIncomingApplyFiles(user?.accountId, 0, 1, 10);
-
-    setApprovalList(approvalList?.list || []);
-    setTotal(approvalList?.total || 0);
+    setApprovalList(approvalList?.data?.list || []);
+    setTotal(approvalList?.data?.total || 0);
   };
 
   const pageChange = async (e, val) => {

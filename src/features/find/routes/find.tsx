@@ -155,7 +155,7 @@ export const Find = () => {
     //   // }
     // );
 
-    dealWithResultList(result);
+    dealWithResultList(result.data);
   };
 
   const deduplication = (arr) => {

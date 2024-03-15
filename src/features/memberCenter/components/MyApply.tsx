@@ -209,16 +209,16 @@ export const MyApply = () => {
     setStatus(value);
     setPageIndex(1);
     const result = await getSendApplyFiles(user?.accountId, 0, 1, 10);
-    setApplyList(result?.list || []);
-    setTotal(result?.total || 0);
+    setApplyList(result?.data?.list || []);
+    setTotal(result?.data?.total || 0);
   };
   const pageChange = async (e, val) => {
     setPageIndex(val);
     const user = storage.getItem(cache_user_key);
 
     const result = await getSendApplyFiles(user?.accountId, 0, val, 10);
-    setApplyList(result?.list || []);
-    setTotal(result?.total || 0);
+    setApplyList(result?.data?.list || []);
+    setTotal(result?.data?.total || 0);
   };
   return (
     <div className="my_apply">
