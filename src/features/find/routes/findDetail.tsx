@@ -113,7 +113,6 @@ export const FindDetail = () => {
 
     await (async (user) => {
       const result = await getFileDetail(passedFile.file_id, user.accountId);
-      debugger
       if (result.code != 2000) {
         showMsg(result.msg)
         return
