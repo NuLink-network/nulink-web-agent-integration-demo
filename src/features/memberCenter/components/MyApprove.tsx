@@ -282,8 +282,8 @@ export const MyApprove = () => {
       val,
       10,
     );
-    setApprovalList(approvalList?.list || []);
-    setTotal(approvalList?.total || 0);
+    setApprovalList(approvalList?.data?.list || []);
+    setTotal(approvalList?.data.total || 0);
   };
 
   const sharesSelectHandler = async (value) => {
