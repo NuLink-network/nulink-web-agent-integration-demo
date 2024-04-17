@@ -34,15 +34,15 @@ const netWorkList: Array<any> = [
     key: NETWORK_LIST.Horus,
     label: "Horus (BSC Testnet)",
   },
-  {
+  /*{
     value: 80001,
     key: NETWORK_LIST.PolygonTestNet,
     label: "Polygon Mumbai",
-  },
+  },*/
   {
     value: 195,
     key: NETWORK_LIST.XChainTestNet,
-    label: "X1 TestNet",
+    label: "X Layer TestNet",
   },
 ];
 
@@ -275,14 +275,14 @@ export const Header = ({ setLoginUser, setLoginStatus }) => {
         </svg>
       </div>
       <div className="header_tab">
-        {/*{chainID ? (
+        {chainID ? (
           <Select
             value={chainID}
             style={{ width: 240 }}
             options={netWorkList}
             onChange={_onOpenModal}
           />
-        ) : null }*/}
+        ) : null }
         <div
           className={activityKey === "1" ? "activity" : ""}
           onClick={() => tabClick("1")}
