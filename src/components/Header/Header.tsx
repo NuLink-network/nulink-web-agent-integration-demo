@@ -26,6 +26,7 @@ export enum NETWORK_LIST {
   ConfluxTestNet = "ConFlux Espace TestNet",
   PolygonTestNet = "Polygon Mumbai", //polygon testnet
   XChainTestNet = "OKX Chain TestNet",
+  ETHHoleSkyTestNet = "ETH HoleSky TestNet",
 }
 
 const netWorkList: Array<any> = [
@@ -34,16 +35,21 @@ const netWorkList: Array<any> = [
     key: NETWORK_LIST.Horus,
     label: "Horus (BSC Testnet)",
   },
-  {
-    value: 80001,
-    key: NETWORK_LIST.PolygonTestNet,
-    label: "Polygon Mumbai",
-  },
+  // {
+  //   value: 80001,
+  //   key: NETWORK_LIST.PolygonTestNet,
+  //   label: "Polygon Mumbai",
+  // },
   {
     value: 195,
     key: NETWORK_LIST.XChainTestNet,
-    label: "X1 TestNet",
+    label: "X-Layer (Coming soon...)",
   },
+  // {
+  //   value: 17000,
+  //   key: NETWORK_LIST.ETHHoleSkyTestNet,
+  //   label: "ETH HoleSky Testnet (Coming soon...)",
+  // },
 ];
 
 export const Header = ({ setLoginUser, setLoginStatus }) => {
@@ -275,14 +281,14 @@ export const Header = ({ setLoginUser, setLoginStatus }) => {
         </svg>
       </div>
       <div className="header_tab">
-        {/*{chainID ? (
+        {chainID ? (
           <Select
             value={chainID}
             style={{ width: 240 }}
             options={netWorkList}
             onChange={_onOpenModal}
           />
-        ) : null }*/}
+        ) : null }
         <div
           className={activityKey === "1" ? "activity" : ""}
           onClick={() => tabClick("1")}
