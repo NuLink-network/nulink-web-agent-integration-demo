@@ -45,11 +45,11 @@ const netWorkList: Array<any> = [
     key: NETWORK_LIST.XChainTestNet,
     label: "X-Layer (Coming soon...)",
   },
-  // {
-  //   value: 17000,
-  //   key: NETWORK_LIST.ETHHoleSkyTestNet,
-  //   label: "ETH HoleSky Testnet (Coming soon...)",
-  // },
+  {
+    value: 17000,
+    key: NETWORK_LIST.ETHHoleSkyTestNet,
+    label: "ETH HoleSky Testnet (Coming soon...)",
+  },
 ];
 
 export const Header = ({ setLoginUser, setLoginStatus }) => {
