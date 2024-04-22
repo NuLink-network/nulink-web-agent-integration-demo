@@ -44,11 +44,13 @@ const netWorkList: Array<any> = [
     value: 195,
     key: NETWORK_LIST.XChainTestNet,
     label: "X-Layer (Coming soon...)",
+    disabled: true,
   },
   {
     value: 17000,
     key: NETWORK_LIST.ETHHoleSkyTestNet,
     label: "ETH HoleSky Testnet (Coming soon...)",
+    disabled: true,
   },
 ];
 
@@ -84,7 +86,7 @@ export const Header = ({ setLoginUser, setLoginStatus }) => {
         "nulink_agent_react_chain_id",
         selectNetworkConfig.value,
       );
-      window.location.reload()
+      window.location.reload();
       //await setNetWorkChainId(selectNetworkConfig.value);
       //window.location.reload();
     }
@@ -288,7 +290,7 @@ export const Header = ({ setLoginUser, setLoginStatus }) => {
             options={netWorkList}
             onChange={_onOpenModal}
           />
-        ) : null }
+        ) : null}
         <div
           className={activityKey === "1" ? "activity" : ""}
           onClick={() => tabClick("1")}
