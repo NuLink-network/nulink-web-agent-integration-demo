@@ -36,6 +36,11 @@ const netWorkList: Array<any> = [
     label: "Horus (BSC Testnet)",
   },
   // {
+  //   chainID: 56,
+  //   label: 'BNB Smart Chain',
+  //   disabled: true,
+  // },
+  // {
   //   value: 80001,
   //   key: NETWORK_LIST.PolygonTestNet,
   //   label: "Polygon Mumbai",
