@@ -54,8 +54,8 @@ const netWorkList: Array<any> = [
   {
     value: 17000,
     key: NETWORK_LIST.ETHHoleSkyTestNet,
-    label: "ETH HoleSky Testnet (Coming soon...)",
-    disabled: true,
+    label: "ETH HoleSky Testnet",
+    disabled: false,
   },
 ];
 
