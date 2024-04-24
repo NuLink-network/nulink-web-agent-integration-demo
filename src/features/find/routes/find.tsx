@@ -309,7 +309,7 @@ export const Find = () => {
       val,
       pageSize,
     );
-    dealWithResultList(result);
+    dealWithResultList(result.data);
   };
 
   useEffect(() => {
