@@ -123,7 +123,7 @@ export const MyApprove = () => {
       render: (_, record) => {
         return (
           <>
-            {record.status === 1 ? (
+            {record.status === 1 || record.status === 4 ? (
               <div style={{ textAlign: "center" }}>
                 <OvalButton
                   title={t<string>("member-center-approve-table-btn")}
