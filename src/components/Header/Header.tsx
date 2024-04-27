@@ -49,7 +49,7 @@ const netWorkList: Array<any> = [
     value: 195,
     key: NETWORK_LIST.XChainTestNet,
     label: "X-Layer (Coming soon...)",
-    disabled: true,
+    disabled: false,
   },
   {
     value: 17000,
