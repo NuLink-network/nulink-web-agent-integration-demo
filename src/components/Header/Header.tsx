@@ -48,7 +48,7 @@ const netWorkList: Array<any> = [
   {
     value: 195,
     key: NETWORK_LIST.XChainTestNet,
-    label: "X-Layer (Coming soon...)",
+    label: "X-Layer",
     disabled: false,
   },
   {
