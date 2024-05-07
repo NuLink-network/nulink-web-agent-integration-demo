@@ -46,16 +46,15 @@ const netWorkList: Array<any> = [
   //   label: "Polygon Mumbai",
   // },
   {
-    value: 195,
-    key: NETWORK_LIST.XChainTestNet,
-    label: "X-Layer",
-    disabled: false,
-  },
-  {
     value: 17000,
     key: NETWORK_LIST.ETHHoleSkyTestNet,
-    label: "ETH HoleSky Testnet",
-    disabled: false,
+    label: "Horus (ETH HoleSky Testnet)"
+  },
+  {
+    value: 195,
+    key: NETWORK_LIST.XChainTestNet,
+    label: "Horus (X-Layer Testnet) Coming Soon ...",
+    disabled: true,
   },
 ];
 
