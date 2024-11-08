@@ -30,7 +30,7 @@ export function get (url, params) {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'clientId': clientId
+        'NuClientId': clientId
       }
     })
       .then((response) => response.json())
@@ -60,7 +60,7 @@ export function post (url, params?) {
       headers: {
         'Content-Type': 'application/json',
         'authorization':`Basic ${token}`,
-        'clientId': clientId
+        'NuClientId': clientId
       },
       body: reqParams
     })
@@ -99,7 +99,7 @@ export function put (url, params) {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        'clientId': clientId
+        'NuClientId': clientId
       },
       body: reqParams
     })
