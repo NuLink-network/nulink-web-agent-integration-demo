@@ -2,6 +2,8 @@ import { baseUrl as baseURL } from './url'
 
 const username = process.env.REACT_APP_SERVER_USERNAME;
 const password = process.env.REACT_APP_SERVER_PASSWORD;
+const clientId = process.env.REACT_APP_PRE_CLIENT_ID || '';
+
 /**
  * Get请求
  *
@@ -27,7 +29,8 @@ export function get (url, params) {
     fetch(`${baseURL}${url}`, {
       method: 'GET',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'clientId': clientId
       }
     })
       .then((response) => response.json())
@@ -56,7 +59,8 @@ export function post (url, params?) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'authorization':`Basic ${token}`
+        'authorization':`Basic ${token}`,
+        'clientId': clientId
       },
       body: reqParams
     })
@@ -94,7 +98,8 @@ export function put (url, params) {
     fetch(`${baseURL}${url}`, {
       method: 'PUT',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'clientId': clientId
       },
       body: reqParams
     })

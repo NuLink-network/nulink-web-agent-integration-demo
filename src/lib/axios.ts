@@ -6,12 +6,17 @@ import { useNotificationStore } from "@/stores/notifications";
 
 const username = process.env.REACT_APP_SERVER_USERNAME;
 const password = process.env.REACT_APP_SERVER_PASSWORD;
+const clientId = process.env.REACT_APP_PRE_CLIENT_ID || "";
 
 function authRequestInterceptor(config: AxiosRequestConfig) {
   const token = Buffer.from(`${username}:${password}`, "utf8").toString(
     "base64"
   );
   config!.headers!.authorization = `Basic ${token}`;
+  console.log("------------clientId:", clientId)
+  if(clientId){
+    config!.headers!.clientId = clientId;
+  }
   return config;
 }
 
